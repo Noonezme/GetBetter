@@ -1,0 +1,167 @@
+/* General styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Navigation Bar Styling */
+.navbar {
+    background-color: #333;
+    padding: 10px 20px; /* Adjusted padding */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+}
+
+.navbar ul li {
+    display: inline;
+    margin: 0 15px;
+    position: relative; /* Set position for pseudo-element */
+}
+
+.navbar ul li:not(:first-child)::before {
+    content: ""; /* Creates a vertical line */
+    position: absolute;
+    left: -10px; /* Adjust as needed */
+    height: 20px; /* Height of the vertical line */
+    width: 2px; /* Width of the vertical line */
+    background-color: #fff; /* Color of the vertical line */
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 8px 16px;
+    display: inline-block;
+    transition: background-color 0.3s; /* Smooth transition for hover */
+}
+
+.navbar ul li a:hover {
+    background-color: #007bff;
+    border-radius: 5px;
+}
+
+/* Header styles */
+header {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    padding-top: 70px; /* Adjusted for navbar height */
+    background: rgba(0, 0, 0, 0.5); /* Slight dark overlay for better text visibility */
+}
+
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.content-overlay {
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+p {
+    font-size: 1.5rem;
+}
+
+/* Tips Section */
+.tips-section {
+    padding: 50px 20px;
+    background-color: #fff;
+    text-align: center;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 20px; /* Margin to separate from edges */
+}
+
+/* Section titles */
+.tips-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+/* Grid layout for the tips */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tip-box {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s; /* Smooth scaling effect on hover */
+}
+
+.tip-box:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.tip-box h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.tip-box p {
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tips-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .btn {
+        font-size: 1rem;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
+}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Hitting Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #121212; /* Dark background */
+            color: white; /* White text for visibility */
+        }
+        h1 {
+            font-size: 36px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            height: 80%;
+            background-color: rgba(30, 30, 30, 0.8); /* Darker semi-transparent background */
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            display: block;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        button {
+            margin: 0 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #startButton {
+            display: none;
+        }
+        #result {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        .settings-menu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #1e1e1e; /* Dark settings menu */
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+        }
+        /* Terminal Styles */
+        .terminal {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 300px;
+            height: 120px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+            display: none; /* Initially hidden */
+        }
+        .terminal input {
+            width: 100%;
+            padding: 5px;
+            background-color: #1e1e1e; /* Dark input background */
+            color: white; /* White text for input */
+            border: 1px solid #007BFF; /* Border color */
+            border-radius: 3px;
+        }
+        #toggleTerminalButton {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        #toggleTerminalButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reflex Training Game</h1>
+    
+    <div class="button-container">
+        <button class="time-button" data-time="10">10s</button>
+        <button class="time-button" data-time="20">20s</button>
+        <button class="time-button" data-time="30">30s</button>
+        <button class="time-button" data-time="60">60s</button>
+        <button class="time-button" data-time="120">120s</button>
+        <button id="trainingButton">Training</button>
+    </div>
+    
+    <div class="container">
+        <button id="startButton">Start</button>
+        <canvas id="gameCanvas"></canvas>
+        <div id="result"></div>
+        <div class="settings-menu">
+            <label for="targetSpeed">Target Speed:</label>
+            <input type="range" id="targetSpeed" min="1" max="10" value="5">
+            
+            <label for="targetSize">Target Size:</label>
+            <input type="range" id="targetSize" min="10" max="100" value="50">
+        </div>
+    </div>
+
+    <!-- Terminal Section -->
+    <div class="terminal" id="terminal">
+        <input type="text" id="commandInput" placeholder="Type command here...">
+    </div>
+    
+    <!-- Toggle Terminal Button -->
+    <button id="toggleTerminalButton">Toggle Terminal</button>
+
+    <audio id="byebyeSound" src="byebye.mp3"></audio>
+    <audio id="wthSound" src="wth.mp3"></audio>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startButton = document.getElementById('startButton');
+        const resultDiv = document.getElementById('result');
+        const timeButtons = document.querySelectorAll('.time-button');
+        const trainingButton = document.getElementById('trainingButton');
+        const targetSpeedInput = document.getElementById('targetSpeed');
+        const targetSizeInput = document.getElementById('targetSize');
+        const commandInput = document.getElementById('commandInput');
+        const terminal = document.getElementById('terminal');
+        const toggleTerminalButton = document.getElementById('toggleTerminalButton');
+
+        const byebyeSound = document.getElementById('byebyeSound');
+        const wthSound = document.getElementById('wthSound');
+
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        const targetImage = new Image();
+        targetImage.src = 'target.png';
+
+        let targets = [];
+        let score = 0;
+        let missedHits = 0;
+        let gameDuration = 0;
+        let isGameActive = false;
+        let timer;
+        let targetSpeed = parseInt(targetSpeedInput.value);
+        let targetSize = parseInt(targetSizeInput.value);
+
+        targetSpeedInput.addEventListener('input', () => {
+            targetSpeed = parseInt(targetSpeedInput.value);
+        });
+
+        targetSizeInput.addEventListener('input', () => {
+            targetSize = parseInt(targetSizeInput.value);
+        });
+
+        function createTarget() {
+            const target = {
+                x: Math.random() * (canvas.width - targetSize),
+                y: Math.random() * (canvas.height - targetSize),
+                dx: (Math.random() - 0.5) * targetSpeed,
+                dy: (Math.random() - 0.5) * targetSpeed,
+                size: targetSize
+            };
+            targets.push(target);
+        }
+
+        function drawTarget(target) {
+            ctx.drawImage(targetImage, target.x, target.y, target.size, target.size);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const target of targets) {
+                drawTarget(target);
+            }
+            ctx.fillStyle = 'white';
+            ctx.font = '20px Arial';
+            ctx.fillText('Score: ' + score, 10, 20);
+            ctx.fillText('Missed Hits: ' + missedHits, 10, 50);
+        }
+
+        function updateTargets() {
+            for (const target of targets) {
+                target.x += target.dx;
+                target.y += target.dy;
+
+                if (target.x < 0 || target.x + target.size > canvas.width) {
+                    target.dx *= -1;
+                }
+                if (target.y < 0 || target.y + target.size > canvas.height) {
+                    target.dy *= -1;
+                }
+            }
+        }
+
+        function hitTest(x, y) {
+            let hit = false;
+            for (let i = 0; i < targets.length; i++) {
+                const target = targets[i];
+                const dx = x - (target.x + target.size / 2);
+                const dy = y - (target.y + target.size / 2);
+                if (Math.sqrt(dx * dx + dy * dy) < target.size / 2) {
+                    targets.splice(i, 1);
+                    score++;
+                    createTarget();
+                    hit = true;
+                    break;
+                }
+            }
+            if (!hit) {
+                missedHits++;
+            }
+        }
+
+        function endGame() {
+            isGameActive = false;
+            clearTimeout(timer);
+            
+            const totalAttempts = score + missedHits;
+            const accuracy = totalAttempts > 0 ? (score / totalAttempts) * 100 : 0;
+            resultDiv.innerHTML = `Game Over!<br>Score: ${score}<br>Accuracy: ${accuracy.toFixed(2)}%<br>Missed Hits: ${missedHits}`;
+            startButton.style.display = 'block';
+        }
+
+        function startGame(duration) {
+            isGameActive = true;
+            score = 0;
+            missedHits = 0;
+            gameDuration = duration;
+
+            createTarget();
+            timer = setTimeout(endGame, gameDuration * 1000);
+
+            startButton.style.display = 'none';
+
+            function gameLoop() {
+                if (isGameActive) {
+                    draw();
+                    updateTargets();
+                    requestAnimationFrame(gameLoop);
+                }
+            }
+
+            gameLoop();
+        }
+
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            hitTest(x, y);
+        });
+
+        timeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const time = parseInt(button.getAttribute('data-time'));
+                startGame(time);
+            });
+        });
+
+        trainingButton.addEventListener('click', () => {
+            startGame(0);
+        });
+
+        /* Terminal Feature Integration */
+        toggleTerminalButton.addEventListener('click', () => {
+            terminal.style.display = terminal.style.display === 'block' ? 'none' : 'block';
+        });
+
+        commandInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const command = commandInput.value.toLowerCase().trim();
+
+                if (command === 'byebye') {
+                    byebyeSound.play();
+                } else if (command === 'wth') {
+                    wthSound.play();
+                } else if (command === 'clear') {
+                    resultDiv.innerHTML = ''; // Clears the result area
+                } else if (command === 'score') {
+                    alert(`Your current score is ${score}`);
+                } else if (command === 'reset') {
+                    score = 0;
+                    missedHits = 0;
+                    resultDiv.innerHTML = ''; // Resets the score and clears the results
+                    alert('Score and missed hits reset!');
+                } else {
+                    alert('Unknown command.');
+                }
+
+                commandInput.value = ''; // Clear the input field after processing the command
+            }
+        });
+    </script>
+</body>
+</html>

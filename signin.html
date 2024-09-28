@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - FPS Aim Training</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('background2.jpg'); /* Set background image */
+            background-size: cover; /* Cover the whole screen */
+            background-position: center; /* Center the background image */
+            color: white; /* Set text color to white for visibility */
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black for dark theme */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+        }
+
+        .container input[type="email"],
+        .container input[type="password"],
+        .container input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .container button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .container button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create an Account</h2>
+        <form id="signUpForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="number" id="age" placeholder="Enter your age" required min="14">
+            <div class="error" id="error-message"></div>
+            <button type="button" onclick="createAccount()">Sign Up</button>
+        </form>
+    </div>
+
+    <script>
+        // Create account function
+        function createAccount() {
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const age = document.getElementById("age").value.trim();
+
+            // Check if all fields are filled
+            if (!email || !password || !age) {
+                document.getElementById("error-message").innerText = "Please fill in all fields.";
+                return;
+            }
+
+            // Check if the user is at least 14 years old
+            if (parseInt(age) < 14) {
+                document.getElementById("error-message").innerText = "You must be at least 14 years old to create an account.";
+                return;
+            }
+
+            // Perform the email verification here
+            // In actual implementation, you will need to integrate Firebase or another service for email verification
+            alert('A verification email will be sent to ' + email);
+            // After successful verification:
+            alert('Account created successfully! Please verify your email.');
+        }
+    </script>
+</body>
+</html>
