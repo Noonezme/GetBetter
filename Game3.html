@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Hitting Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1a1a1a;
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 36px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            height: 80%;
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            display: block;
+            background-color: #333;
+            border: 2px solid #007BFF;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        button {
+            margin: 0 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #startButton {
+            display: none;
+        }
+        #result {
+            color: #ffffff;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        /* Terminal Styles */
+        .terminal {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 300px;
+            height: 120px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+            display: none; /* Initially hidden */
+        }
+        .terminal input {
+            width: 100%;
+            padding: 5px;
+            background-color: #1e1e1e;
+            color: white;
+            border: 1px solid #007BFF;
+            border-radius: 3px;
+        }
+        #toggleTerminalButton {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        #toggleTerminalButton:hover {
+            background-color: #0056b3;
+        }
+        /* Hit Control Bar */
+        .hit-control-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .hit-control-container input {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reflex Training Game</h1>
+    
+    <div class="button-container">
+        <button class="time-button" data-time="10">10s</button>
+        <button class="time-button" data-time="20">20s</button>
+        <button class="time-button" data-time="30">30s</button>
+        <button class="time-button" data-time="60">60s</button>
+        <button class="time-button" data-time="120">120s</button>
+        <button id="trainingButton">Training</button>
+    </div>
+
+    <!-- Hit Control Bar -->
+    <div class="hit-control-container">
+        Hits to Score: <input type="number" id="hitControl" value="1" min="1" max="5">
+    </div>
+    
+    <div class="container">
+        <button id="startButton">Start</button>
+        <canvas id="gameCanvas"></canvas>
+        <div id="result"></div>
+    </div>
+
+    <!-- Terminal Section -->
+    <div class="terminal" id="terminal">
+        <input type="text" id="commandInput" placeholder="Type command here...">
+        <div id="terminalOutput" style="color: white; max-height: 80px; overflow-y: auto;"></div>
+    </div>
+    
+    <!-- Toggle Terminal Button -->
+    <button id="toggleTerminalButton">Toggle Terminal</button>
+
+    <audio id="byebyeSound" src="byebye.mp3"></audio>
+    <audio id="wthSound" src="wth.mp3"></audio>
+    <audio id="clapSound" src="clap.mp3"></audio>
+    <audio id="bruhSound" src="bruh.mp3"></audio>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startButton = document.getElementById('startButton');
+        const resultDiv = document.getElementById('result');
+        const timeButtons = document.querySelectorAll('.time-button');
+        const trainingButton = document.getElementById('trainingButton');
+        const commandInput = document.getElementById('commandInput');
+        const terminal = document.getElementById('terminal');
+        const toggleTerminalButton = document.getElementById('toggleTerminalButton');
+        const hitControl = document.getElementById('hitControl');
+        const clapSound = document.getElementById('clapSound');
+        const bruhSound = document.getElementById('bruhSound');
+        const terminalOutput = document.getElementById('terminalOutput'); // Terminal output area
+
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        const targetImage = new Image();
+        targetImage.src = 'target.png';
+
+        let targets = [];
+        let score = 0;
+        let missedHits = 0;
+        let gameDuration = 0;
+        let isGameActive = false;
+        let timer;
+        let hitRequirement = 1;
+
+        function createTarget() {
+            const target = {
+                x: Math.random() * (canvas.width - 50),
+                y: Math.random() * (canvas.height - 50),
+                size: Math.random() * (50 - 30) + 30,
+                hitsRequired: hitRequirement // each target needs multiple hits
+            };
+            targets.push(target);
+        }
+
+        function drawTarget(target) {
+            ctx.drawImage(targetImage, target.x, target.y, target.size, target.size);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const target of targets) {
+                drawTarget(target);
+            }
+            ctx.fillStyle = 'white';
+            ctx.font = '20px Arial';
+            ctx.fillText('Score: ' + score, 10, 20);
+            ctx.fillText('Missed Hits: ' + missedHits, 10, 50);
+        }
+
+        function hitTest(x, y) {
+            let hit = false;
+            for (let i = 0; i < targets.length; i++) {
+                const target = targets[i];
+                const dx = x - (target.x + target.size / 2);
+                const dy = y - (target.y + target.size / 2);
+                if (Math.sqrt(dx * dx + dy * dy) < target.size / 2) {
+                    target.hitsRequired--;
+                    if (target.hitsRequired <= 0) {
+                        targets.splice(i, 1); // Remove the target after all hits are made
+                        score++;
+                        createTarget();
+                    }
+                    hit = true;
+                    break;
+                }
+            }
+            if (!hit) {
+                missedHits++;
+            }
+        }
+
+        function endGame() {
+            isGameActive = false;
+            clearTimeout(timer);
+            
+            const totalAttempts = score + missedHits;
+            const accuracy = totalAttempts > 0 ? (score / totalAttempts) * 100 : 0;
+            resultDiv.innerText = `Game Over! Score: ${score}, Missed Hits: ${missedHits}, Accuracy: ${accuracy.toFixed(2)}%`;
+
+            // Play the appropriate audio based on the score
+            if (accuracy >= 50) {
+                clapSound.play(); // Play "clap" sound for good score
+            } else {
+                bruhSound.play(); // Play "bruh" sound for bad score
+            }
+
+            startButton.style.display = 'none';
+            targets = [];
+            score = 0;
+            missedHits = 0;
+        }
+
+        function startGame(duration) {
+            isGameActive = true;
+            resultDiv.innerText = '';
+            targets = [];
+            score = 0;
+            missedHits = 0;
+
+            // Set the hit requirement from the input control
+            hitRequirement = parseInt(hitControl.value);
+
+            for (let i = 0; i < 5; i++) {
+                createTarget();
+            }
+
+            function update() {
+                if (isGameActive) {
+                    draw();
+                    timer = setTimeout(update, 1000 / 60); // 60 FPS
+                }
+            }
+
+            update();
+            setTimeout(endGame, duration);
+        }
+
+        // Process command from terminal input
+        function processCommand(command) {
+            if (command === "byebye") {
+                const audio = new Audio('byebye.mp3'); // Create audio object
+                audio.play(); // Play the audio
+                terminalOutput.innerHTML += `<div>Played: ${command}</div>`;
+            } else if (command === "wth") {
+                const audio = new Audio('wth.mp3'); // Create audio object
+                audio.play(); // Play the audio
+                terminalOutput.innerHTML += `<div>Played: ${command}</div>`;
+            } else {
+                terminalOutput.innerHTML += `<div>Unknown command: ${command}</div>`;
+            }
+            terminalOutput.scrollTop = terminalOutput.scrollHeight; // Scroll to the bottom
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (isGameActive) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                hitTest(x, y);
+            }
+        });
+
+        timeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                gameDuration = parseInt(button.getAttribute('data-time')) * 1000;
+                startButton.style.display = 'block';
+            });
+        });
+
+        startButton.addEventListener('click', () => {
+            startButton.style.display = 'none';
+            startGame(gameDuration);
+        });
+
+        toggleTerminalButton.addEventListener('click', () => {
+            terminal.style.display = terminal.style.display === 'none' ? 'block' : 'none';
+        });
+
+        commandInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const command = commandInput.value.trim();
+                processCommand(command);
+                commandInput.value = ''; // Clear input after processing
+            }
+        });
+
+        trainingButton.addEventListener('click', () => {
+            console.log('Training button clicked');
+        });
+    </script>
+</body>
+</html>
