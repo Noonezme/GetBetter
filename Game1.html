@@ -241,6 +241,29 @@
             }
             gameLoop();
         }
+        function endGame() {
+    isGameActive = false;
+    clearTimeout(timer);
+    
+    const totalAttempts = score + missedHits;
+    const accuracy = totalAttempts > 0 ? (score / totalAttempts) * 100 : 0; // Calculate accuracy
+    resultDiv.innerText = `Game Over! Score: ${score}, Missed Hits: ${missedHits}, Accuracy: ${accuracy.toFixed(2)}%`; // Display results
+    
+    // Play the appropriate audio based on the score
+    let audio;
+    if (accuracy >= 50) {
+        audio = new Audio('clap.mp3'); // Play "clap" sound for good score
+    } else {
+        audio = new Audio('bruh.mp3'); // Play "bruh" sound for bad score
+    }
+    audio.play(); // Play the chosen audio file
+
+    startButton.style.display = 'none'; // Hide the start button
+    targets = []; // Reset targets
+    score = 0; // Reset score
+    missedHits = 0; // Reset missed hits
+}
+
 
         canvas.addEventListener('click', (e) => {
             if (!isGameActive) return;
