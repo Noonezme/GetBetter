@@ -8,45 +8,44 @@
         body {
             margin: 0;
             overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #121212; /* Dark background */
-            color: white; /* White text for visibility */
+            height: 100vh; /* Full height */
+            display: flex; /* Flexbox for centering */
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center horizontally */
+            background-color: #353535; /* Light background */
         }
         h1 {
-            font-size: 36px;
-            margin: 20px 0;
-            text-align: center;
+            color: rgb(134, 134, 134); /* Title color */
+            font-size: 36px; /* Increased font size */
+            margin: 20px 0; /* Spacing around the title */
+            text-align: center; /* Center title text */
         }
         .container {
-            width: 90%;
-            max-width: 1200px;
-            height: 80%;
-            background-color: rgba(30, 30, 30, 0.8); /* Darker semi-transparent background */
-            border-radius: 10px;
-            position: relative;
+            width: 90%; /* Increased width of the rectangle */
+            max-width: 1200px; /* Maximum width for larger screens */
+            height: 80%; /* Height of the rectangle */
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            border-radius: 10px; /* Rounded corners */
+            position: relative; /* Position relative for absolute positioning of the game */
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            flex-direction: column; /* Stack elements vertically */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+            margin-bottom: 20px; /* Space below the container */
         }
         canvas {
             width: 100%;
             height: 100%;
-            border-radius: 10px;
-            display: block;
+            border-radius: 10px; /* Rounded corners for canvas */
+            display: block; /* Remove extra space below canvas */
         }
         .button-container {
             display: flex;
             justify-content: center;
-            margin: 10px 0;
+            margin: 10px 0; /* Spacing around buttons */
         }
         button {
-            margin: 0 5px;
+            margin: 0 5px; /* Space between buttons */
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -56,65 +55,79 @@
             font-size: 16px;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Darker blue on hover */
         }
         #startButton {
-            display: none;
+            display: none; /* Hide start button initially */
         }
         #result {
-            font-size: 20px;
-            margin-top: 10px;
+            color: white; /* Result color */
+            font-size: 20px; /* Font size for results */
+            margin-top: 10px; /* Space above results */
         }
         .settings-menu {
-            position: absolute;
+            position: absolute; /* Position the settings menu */
             top: 10px;
             right: 10px;
-            background-color: #1e1e1e; /* Dark settings menu */
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+            color: white;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+            z-index: 10; /* Ensure it stays on top */
         }
-        /* Terminal Styles */
+        .settings-menu label {
+            display: block; /* Each label on a new line */
+            margin: 5px 0; /* Spacing between labels */
+        }
+        .settings-menu input {
+            width: 100%; /* Full width for sliders */
+        }
         .terminal {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            width: 300px;
-            height: 120px;
-            background-color: rgba(255, 255, 255, 0.1);
+            bottom: 60px; /* Adjusted to avoid overlap with terminal button */
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+            color: white;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
-            display: none; /* Initially hidden */
+            max-width: 300px;
+            max-height: 200px; /* Set maximum height */
+            overflow: hidden; /* Hide overflow initially */
+            z-index: 10; /* Ensure it stays on top */
+            display: none; /* Hide terminal initially */
+        }
+        #terminalOutput {
+            max-height: 150px; /* Limit output height */
+            overflow-y: auto; /* Enable vertical scrolling */
         }
         .terminal input {
             width: 100%;
+            background: transparent;
+            color: white;
+            border: none;
+            outline: none;
             padding: 5px;
-            background-color: #1e1e1e; /* Dark input background */
-            color: white; /* White text for input */
-            border: 1px solid #007BFF; /* Border color */
-            border-radius: 3px;
         }
-        #toggleTerminalButton {
+        #terminalButton {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            padding: 10px;
+            bottom: 20px; /* Position button above the terminal */
+            right: 20px; /* Align with terminal */
+            padding: 10px 15px;
             border: none;
             border-radius: 5px;
-            background-color: #007BFF;
+            background-color: #28a745;
             color: white;
             cursor: pointer;
         }
-        #toggleTerminalButton:hover {
-            background-color: #0056b3;
+        #terminalButton:hover {
+            background-color: #218838; /* Darker green on hover */
         }
     </style>
 </head>
 <body>
-    <h1>Reflex Training Game</h1>
+    <h1>Reflex Training Game</h1> <!-- Title at the top of the screen -->
     
-    <div class="button-container">
+    <div class="button-container"> <!-- Button container for timing buttons -->
         <button class="time-button" data-time="10">10s</button>
         <button class="time-button" data-time="20">20s</button>
         <button class="time-button" data-time="30">30s</button>
@@ -127,25 +140,24 @@
         <button id="startButton">Start</button>
         <canvas id="gameCanvas"></canvas>
         <div id="result"></div>
-        <div class="settings-menu">
-            <label for="targetSpeed">Target Speed:</label>
-            <input type="range" id="targetSpeed" min="1" max="10" value="5">
-            
-            <label for="targetSize">Target Size:</label>
-            <input type="range" id="targetSize" min="10" max="100" value="50">
-        </div>
     </div>
 
-    <!-- Terminal Section -->
+    <!-- Settings Menu -->
+    <div class="settings-menu">
+        <label for="targetSize">Target Size: <span id="sizeValue">40</span></label>
+        <input type="range" id="targetSize" min="30" max="50" value="40">
+        <label for="targetSpeed">Target Speed: <span id="speedValue">5</span></label>
+        <input type="range" id="targetSpeed" min="1" max="10" value="5">
+    </div>
+
+    <!-- Terminal -->
     <div class="terminal" id="terminal">
-        <input type="text" id="commandInput" placeholder="Type command here...">
+        <div id="terminalOutput" style="max-height: 150px; overflow-y: auto;"></div> <!-- Added scrolling here -->
+        <input type="text" id="terminalInput" placeholder="Type a command..." />
     </div>
-    
-    <!-- Toggle Terminal Button -->
-    <button id="toggleTerminalButton">Toggle Terminal</button>
 
-    <audio id="byebyeSound" src="byebye.mp3"></audio>
-    <audio id="wthSound" src="wth.mp3"></audio>
+    <!-- Terminal Button -->
+    <button id="terminalButton">Toggle Terminal</button>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -154,20 +166,21 @@
         const resultDiv = document.getElementById('result');
         const timeButtons = document.querySelectorAll('.time-button');
         const trainingButton = document.getElementById('trainingButton');
-        const targetSpeedInput = document.getElementById('targetSpeed');
         const targetSizeInput = document.getElementById('targetSize');
-        const commandInput = document.getElementById('commandInput');
+        const targetSpeedInput = document.getElementById('targetSpeed');
+        const sizeValueLabel = document.getElementById('sizeValue');
+        const speedValueLabel = document.getElementById('speedValue');
         const terminal = document.getElementById('terminal');
-        const toggleTerminalButton = document.getElementById('toggleTerminalButton');
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalButton = document.getElementById('terminalButton');
 
-        const byebyeSound = document.getElementById('byebyeSound');
-        const wthSound = document.getElementById('wthSound');
-
+        // Resize the canvas to fill the container
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 
         const targetImage = new Image();
-        targetImage.src = 'target.png';
+        targetImage.src = 'target.png'; // Set the image source for the target
 
         let targets = [];
         let score = 0;
@@ -175,30 +188,28 @@
         let gameDuration = 0;
         let isGameActive = false;
         let timer;
-        let targetSpeed = parseInt(targetSpeedInput.value);
-        let targetSize = parseInt(targetSizeInput.value);
+        
+        function getTargetSize() {
+            return parseInt(targetSizeInput.value); // Get target size from the slider
+        }
 
-        targetSpeedInput.addEventListener('input', () => {
-            targetSpeed = parseInt(targetSpeedInput.value);
-        });
-
-        targetSizeInput.addEventListener('input', () => {
-            targetSize = parseInt(targetSizeInput.value);
-        });
+        function getTargetSpeed() {
+            return parseInt(targetSpeedInput.value); // Get target speed from the slider
+        }
 
         function createTarget() {
             const target = {
-                x: Math.random() * (canvas.width - targetSize),
-                y: Math.random() * (canvas.height - targetSize),
-                dx: (Math.random() - 0.5) * targetSpeed,
-                dy: (Math.random() - 0.5) * targetSpeed,
-                size: targetSize
+                x: Math.random() * (canvas.width - 50), // Ensure enough space for the target image
+                y: Math.random() * (canvas.height - 50),
+                size: getTargetSize(), // Use size from settings
+                dx: (Math.random() < 0.5 ? 1 : -1) * getTargetSpeed(), // Horizontal speed
+                dy: (Math.random() < 0.5 ? 1 : -1) * getTargetSpeed() // Vertical speed
             };
             targets.push(target);
         }
 
         function drawTarget(target) {
-            ctx.drawImage(targetImage, target.x, target.y, target.size, target.size);
+            ctx.drawImage(targetImage, target.x, target.y, target.size, target.size); // Draw the target image
         }
 
         function draw() {
@@ -208,122 +219,135 @@
             }
             ctx.fillStyle = 'white';
             ctx.font = '20px Arial';
-            ctx.fillText('Score: ' + score, 10, 20);
-            ctx.fillText('Missed Hits: ' + missedHits, 10, 50);
-        }
-
-        function updateTargets() {
-            for (const target of targets) {
-                target.x += target.dx;
-                target.y += target.dy;
-
-                if (target.x < 0 || target.x + target.size > canvas.width) {
-                    target.dx *= -1;
-                }
-                if (target.y < 0 || target.y + target.size > canvas.height) {
-                    target.dy *= -1;
-                }
-            }
+            ctx.fillText(`Score: ${score}`, 10, 20);
+            ctx.fillText(`Missed: ${missedHits}`, 10, 40);
         }
 
         function hitTest(x, y) {
-            let hit = false;
-            for (let i = 0; i < targets.length; i++) {
-                const target = targets[i];
-                const dx = x - (target.x + target.size / 2);
-                const dy = y - (target.y + target.size / 2);
-                if (Math.sqrt(dx * dx + dy * dy) < target.size / 2) {
-                    targets.splice(i, 1);
+            for (const target of targets) {
+                if (x >= target.x && x <= target.x + target.size && y >= target.y && y <= target.y + target.size) {
                     score++;
-                    createTarget();
-                    hit = true;
-                    break;
+                    targets.splice(targets.indexOf(target), 1); // Remove the hit target
+                    createTarget(); // Create a new target
+                    return;
                 }
             }
-            if (!hit) {
-                missedHits++;
-            }
+            missedHits++; // Increment missed hits if no target was hit
         }
 
         function endGame() {
             isGameActive = false;
             clearTimeout(timer);
-            
             const totalAttempts = score + missedHits;
-            const accuracy = totalAttempts > 0 ? (score / totalAttempts) * 100 : 0;
-            resultDiv.innerHTML = `Game Over!<br>Score: ${score}<br>Accuracy: ${accuracy.toFixed(2)}%<br>Missed Hits: ${missedHits}`;
-            startButton.style.display = 'block';
+            const accuracy = totalAttempts > 0 ? (score / totalAttempts) * 100 : 0; // Calculate accuracy
+            resultDiv.innerText = `Game Over! Score: ${score}, Missed Hits: ${missedHits}, Accuracy: ${accuracy.toFixed(2)}%`; // Display results
+            startButton.style.display = 'none'; // Hide the start button
+            targets = []; // Reset targets
+            score = 0; // Reset score
+            missedHits = 0; // Reset missed hits
+        }
+
+        function updateTargets() {
+            for (const target of targets) {
+                target.x += target.dx; // Update target position
+                target.y += target.dy; // Update target position
+
+                // Bounce off the walls
+                if (target.x <= 0 || target.x + target.size >= canvas.width) {
+                    target.dx *= -1; // Reverse horizontal direction
+                }
+                if (target.y <= 0 || target.y + target.size >= canvas.height) {
+                    target.dy *= -1; // Reverse vertical direction
+                }
+            }
         }
 
         function startGame(duration) {
             isGameActive = true;
+            resultDiv.innerText = ''; // Clear previous results
+            targets = [];
             score = 0;
             missedHits = 0;
-            gameDuration = duration;
 
-            createTarget();
-            timer = setTimeout(endGame, gameDuration * 1000);
+            for (let i = 0; i < 5; i++) {
+                createTarget();
+            }
 
-            startButton.style.display = 'none';
+            draw();
+
+            if (duration !== Infinity) {
+                timer = setTimeout(endGame, duration * 1000); // End game after specified duration
+            }
 
             function gameLoop() {
+                updateTargets(); // Update target positions
+                draw();
                 if (isGameActive) {
-                    draw();
-                    updateTargets();
                     requestAnimationFrame(gameLoop);
                 }
             }
-
-            gameLoop();
+            gameLoop(); // Start the game loop
         }
 
-        canvas.addEventListener('click', (event) => {
+        canvas.addEventListener('mousedown', (e) => {
+            if (!isGameActive) return; // Ignore clicks if game is not active
             const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
             hitTest(x, y);
         });
 
         timeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const time = parseInt(button.getAttribute('data-time'));
-                startGame(time);
+            button.addEventListener('click', function() {
+                gameDuration = parseInt(this.dataset.time);
+                startButton.style.display = 'block'; // Show the start button
             });
         });
 
-        trainingButton.addEventListener('click', () => {
-            startGame(0);
+        startButton.addEventListener('click', function() {
+            startGame(gameDuration);
+            startButton.style.display = 'none'; // Hide start button
         });
 
-        /* Terminal Feature Integration */
-        toggleTerminalButton.addEventListener('click', () => {
-            terminal.style.display = terminal.style.display === 'block' ? 'none' : 'block';
+        trainingButton.addEventListener('click', function() {
+            gameDuration = Infinity; // Set duration to infinity for training
+            startButton.style.display = 'block'; // Show the start button
         });
 
-        commandInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                const command = commandInput.value.toLowerCase().trim();
+        // Update display values for size and speed
+        targetSizeInput.addEventListener('input', function() {
+            sizeValueLabel.innerText = targetSizeInput.value; // Update displayed size value
+        });
 
-                if (command === 'byebye') {
-                    byebyeSound.play();
-                } else if (command === 'wth') {
-                    wthSound.play();
-                } else if (command === 'clear') {
-                    resultDiv.innerHTML = ''; // Clears the result area
-                } else if (command === 'score') {
-                    alert(`Your current score is ${score}`);
-                } else if (command === 'reset') {
-                    score = 0;
-                    missedHits = 0;
-                    resultDiv.innerHTML = ''; // Resets the score and clears the results
-                    alert('Score and missed hits reset!');
-                } else {
-                    alert('Unknown command.');
-                }
+        targetSpeedInput.addEventListener('input', function() {
+            speedValueLabel.innerText = targetSpeedInput.value; // Update displayed speed value
+        });
 
-                commandInput.value = ''; // Clear the input field after processing the command
+        // Handle terminal commands
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.trim().toLowerCase();
+                terminalInput.value = ''; // Clear input
+                processCommand(command); // Process the command
             }
         });
+
+        function processCommand(command) {
+            if (command === "byebye") {
+                const audio = new Audio('byebye.mp3'); // Create audio object
+                audio.play(); // Play the audio
+            } else {
+                terminalOutput.innerHTML += `<div>Unknown command: ${command}</div>`;
+            }
+            terminalOutput.scrollTop = terminalOutput.scrollHeight; // Scroll to the bottom
+        }
+
+        // Toggle terminal visibility
+        terminalButton.addEventListener('click', () => {
+            terminal.style.display = terminal.style.display === 'none' ? 'block' : 'none'; // Toggle display
+            terminalInput.focus(); // Focus input field when terminal opens
+        });
+
     </script>
 </body>
 </html>
