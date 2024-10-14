@@ -155,6 +155,43 @@
         #toggleTerminalButton:hover {
             background-color: #0056b3;
         }
+
+        /* Ad styling */
+        .ad-container {
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+        }
+        .ad-container img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .ad-container h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 20px 0;
+        }
+        .ad-container p {
+            font-size: 1rem;
+            color: #555;
+        }
+        .ad-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+        .ad-container a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -228,6 +265,14 @@
     
     <!-- Toggle Terminal Button -->
     <button id="toggleTerminalButton">Toggle Terminal</button>
+
+    <!-- Ethical Hacking Course Ad at Bottom -->
+    <div class="ad-container">
+        <img src="ad.jpg" alt="Free Ethical Hacking Course Ad">
+        <h2>Free Ethical Hacking Course</h2>
+        <p>Join our Discord for a free ethical hacking course. No verification required!</p>
+        <a href="https://discord.com" target="_blank">Join Now</a>
+    </div>
 
     <script>
         // Terminal Feature Integration
