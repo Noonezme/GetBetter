@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Géographie</title>
+    <style>
+        /* Main page styles */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url('background11.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            text-align: center;
+            flex-direction: column;
+            backdrop-filter: blur(3px); /* Adds a slight blur effect to the background */
+        }
+
+        /* Styling for title image */
+        .title-image {
+            max-width: 80%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        /* Button styles */
+        .button {
+            font-size: 1.5em;
+            padding: 15px 30px;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow for depth */
+            transition: background-color 0.3s, transform 0.2s; /* Smooth hover effect */
+        }
+
+        .button:hover {
+            background-color: rgba(255, 255, 255, 1); /* Solid white on hover */
+            transform: scale(1.05); /* Slight scaling effect on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Title Image -->
+    <img src="title.png" alt="Connais-tu la géographie d'Alsace ?" class="title-image">
+    
+    <!-- Start Quiz Button -->
+    <a href="#" class="button">Commencer le quiz</a>
+</body>
+</html>
