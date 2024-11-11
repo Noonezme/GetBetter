@@ -79,6 +79,23 @@
       margin-top: 20px;
     }
 
+    .return-button {
+      margin-top: 20px;
+      font-size: 16px;
+      padding: 10px 25px;
+      background-color: #ff4500;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .return-button:hover {
+      background-color: #d03800;
+    }
+
     /* Author in the bottom-right corner */
     .author {
       position: fixed;
@@ -99,6 +116,8 @@
     <div class="answers" id="answers"></div>
     <div class="score-summary" id="score-summary"></div>
     <div id="final-score" class="final-score"></div>
+    <!-- Return button -->
+    <a href="https://get-better-three.vercel.app/QUIZstart.html" class="return-button">Retour</a>
   </div>
 
   <div class="author" id="author">S.Zaland, D.Mael</div>
@@ -110,7 +129,6 @@
       "background9.png", "background10.png", "background11.png"
     ];
 
-    // Combine both sets of questions
     const allQuestions = [
       {
         text: "Quelle est l'équivalence alsacienne de Strasbourg ?",
@@ -214,8 +232,8 @@
       },
       {
         text: "Vrai ou faux : Niederbronn-les-Bains est un nom alsacien.",
-        options: { A: "Vrai", B: "Faux" },
-        correctAnswer: "B"
+        options: { A: "Faux", B: "Vrai" },
+        correctAnswer: "A"
       },
       {
         text: "Le nom alsacien pour Strasbourg est :",
