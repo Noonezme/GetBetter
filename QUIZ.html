@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Alsacien</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      z-index: -2;
+      transition: background-image 0.5s ease;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: -1;
+    }
+
+    .quiz-box {
+      text-align: center;
+      color: white;
+      width: 50%;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
+    .button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+
+    .score-summary {
+      margin-top: 20px;
+    }
+
+    .final-score {
+      font-size: 24px;
+      color: yellow;
+      margin-top: 20px;
+    }
+
+    /* Author in the bottom-right corner */
+    .author {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      color: white;
+      font-size: 24px; /* Increased font size */
+      font-weight: bold; /* Made the text bold for more emphasis */
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div id="background" class="background"></div>
+  <div class="overlay"></div>
+  <div class="quiz-box">
+    <h2 id="question-text">La question apparaît ici</h2>
+    <div class="answers" id="answers"></div>
+    <div class="score-summary" id="score-summary"></div>
+    <div id="final-score" class="final-score"></div>
+  </div>
+
+  <div class="author" id="author">S.Zaland, D.Mael</div>
+
+  <script>
+    const backgrounds = [
+      "background1.png", "background2.png", "background3.png", "background4.png",
+      "background5.png", "background6.png", "background7.png", "background8.png",
+      "background9.png", "background10.png", "background11.png"
+    ];
+
+    // Combine both sets of questions
+    const allQuestions = [
+      {
+        text: "Quelle est l'équivalence alsacienne de Strasbourg ?",
+        options: { A: "Strossburg", B: "Straßburg", C: "Strasbourg" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Dans quelle ville française se rendriez-vous si vous allez à Mülhausen ?",
+        options: { A: "Mulhouse", B: "Belfort", C: "Colmar" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Vrai ou faux : Kolmar est le nom alsacien de Colmar.",
+        options: { A: "Vrai", B: "Faux" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Associez le nom suivant : Hanau. Est-ce le nom alsacien pour...",
+        options: { A: "Haguenau", B: "Sélestat", C: "Obernai" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Quel nom parmi les suivants est inventé et n'existe pas vraiment ?",
+        options: { A: "Straßburg", B: "Saint-Brice-les-Bains", C: "Kaisersberg" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Quelle ville française correspond à Schlettstadt ?",
+        options: { A: "Molsheim", B: "Strasbourg", C: "Sélestat" },
+        correctAnswer: "C"
+      },
+      {
+        text: "Lequel de ces noms est identique en français et en alsacien ?",
+        options: { A: "Guebwiller", B: "Colmar", C: "Mulhouse" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Quel nom alsacien désigne Belfort ?",
+        options: { A: "Bellefort", B: "Beaufort", C: "Bielefeld" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Kaysersberg et Kaisersberg font référence à la même ville. Vrai ou faux ?",
+        options: { A: "Vrai", B: "Faux" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Parmi les noms suivants, lequel désigne une ville réelle en Alsace ?",
+        options: { A: "Niederbronn-les-Bains", B: "Oberbronn-les-Bains", C: "Saint-Brice-les-Bains" },
+        correctAnswer: "A"
+      },
+      {
+        text: "À quel nom alsacien correspond la ville de Colmar ?",
+        options: { A: "Kalmar", B: "Kolmar", C: "Kulmar" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Quel est le nom français de la ville alsacienne de Kaisersberg ?",
+        options: { A: "Kaysersberg", B: "Kaysersburg", C: "Keisersberg" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Associez le nom alsacien à la ville française : Straßburg.",
+        options: { A: "Sélestat", B: "Strasbourg", C: "Haguenau" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Quelle ville alsacienne s'appelle Guebwiller en français et en alsacien ?",
+        options: { A: "Guebwiller", B: "Gebwillersheim", C: "Geubwiller" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Lequel de ces noms désigne une ville réelle d’Alsace ?",
+        options: { A: "Niederwald", B: "Niederbronn-les-Bains", C: "Niederwiller" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Quel est le nom alsacien de Mulhouse ?",
+        options: { A: "Müllingen", B: "Mühlhausen", C: "Mülhausen" },
+        correctAnswer: "C"
+      },
+      {
+        text: "Vrai ou faux : Obernai est un nom identique en français et en alsacien.",
+        options: { A: "Vrai", B: "Faux" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Quelle est l'équivalence en français de Schlettstadt ?",
+        options: { A: "Sélestat", B: "Obernai", C: "Strasbourg" },
+        correctAnswer: "A"
+      },
+      {
+        text: "À quel nom français correspond Hanau en alsacien ?",
+        options: { A: "Colmar", B: "Haguenau", C: "Mulhouse" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Quel nom alsacien désigne la ville de Belfort ?",
+        options: { A: "Bellefort", B: "Beaufort", C: "Belffort" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Vrai ou faux : Niederbronn-les-Bains est un nom alsacien.",
+        options: { A: "Vrai", B: "Faux" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Le nom alsacien pour Strasbourg est :",
+        options: { A: "Strassburg", B: "Straßburg", C: "Strusbourg" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Lequel de ces noms est un piège, c'est-à-dire inventé ?",
+        options: { A: "Straßburg", B: "Kaisersberg", C: "Saint-Brice-les-Bains" },
+        correctAnswer: "C"
+      },
+      {
+        text: "Quel nom français correspond au nom alsacien de Molsheim ?",
+        options: { A: "Obernai", B: "Molsheim", C: "Mulhouse" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Associez l’équivalence : la ville française de Sélestat correspond à :",
+        options: { A: "Kolmar", B: "Schlettstadt", C: "Schletzheim" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Quel est le nom alsacien de la ville de Kaysersberg ?",
+        options: { A: "Kaysersbuhl", B: "Keisersberg", C: "Kaisersberg" },
+        correctAnswer: "C"
+      },
+      {
+        text: "Associez le nom suivant : Obernai. Est-ce le nom alsacien ou français ?",
+        options: { A: "Français", B: "Alsacien", C: "Les deux" },
+        correctAnswer: "C"
+      },
+      {
+        text: "Quelle ville alsacienne a le même nom en français et en alsacien ?",
+        options: { A: "Obernai", B: "Mulhouse", C: "Strasbourg" },
+        correctAnswer: "A"
+      },
+      {
+        text: "Le nom alsacien pour la ville française de Colmar est :",
+        options: { A: "Kalmaren", B: "Kolmar", C: "Koelmar" },
+        correctAnswer: "B"
+      },
+      {
+        text: "Quelle ville française est aussi connue sous le nom de Schlettstadt en alsacien ?",
+        options: { A: "Molsheim", B: "Sélestat", C: "Haguenau" },
+        correctAnswer: "B"
+      }
+    ];
+
+    // Randomize the questions and pick 10
+    function getRandomQuestions() {
+      const shuffledQuestions = allQuestions.sort(() => 0.5 - Math.random());
+      return shuffledQuestions.slice(0, 10);
+    }
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    const userAnswers = [];
+    const questions = getRandomQuestions();
+
+    // Wait for all images and resources to load before starting
+    window.onload = function() {
+      displayQuestion();
+    };
+
+    function updateBackground() {
+      const background = document.getElementById('background');
+      background.style.backgroundImage = `url(${backgrounds[Math.min(currentQuestionIndex, backgrounds.length - 1)]})`;
+    }
+
+    function displayQuestion() {
+      const question = questions[currentQuestionIndex];
+      document.getElementById("question-text").innerText = question.text;
+      const answersDiv = document.getElementById("answers");
+      answersDiv.innerHTML = '';
+
+      for (const [key, option] of Object.entries(question.options)) {
+        const button = document.createElement("button");
+        button.classList.add("button");
+        button.innerText = `${key}) ${option}`;
+        button.onclick = () => selectAnswer(key);
+        answersDiv.appendChild(button);
+      }
+
+      updateBackground();
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        displayQuestion();
+      } else {
+        showScore();
+      }
+    }
+
+    function selectAnswer(answer) {
+      userAnswers[currentQuestionIndex] = answer;
+      if (answer === questions[currentQuestionIndex].correctAnswer) {
+        score++;
+      }
+      nextQuestion();
+    }
+
+    function showScore() {
+      const scoreSummary = document.getElementById("score-summary");
+      const finalScoreDisplay = document.getElementById("final-score");
+
+      finalScoreDisplay.innerText = `Score final : ${score} / ${questions.length}`;
+
+      let summaryHtml = "<h3>Réponses incorrectes :</h3><ul>";
+      questions.forEach((question, index) => {
+        if (userAnswers[index] !== question.correctAnswer) {
+          summaryHtml += `<li>${question.text} - Réponse correcte : ${question.correctAnswer}) ${question.options[question.correctAnswer]}</li>`;
+        }
+      });
+      summaryHtml += "</ul>";
+      scoreSummary.innerHTML = summaryHtml;
+
+      document.getElementById("background").style.backgroundImage = `url(${backgrounds[backgrounds.length - 1]})`;
+      document.getElementById("question-text").innerText = "Quiz terminé !";
+      document.getElementById("answers").innerHTML = "";
+    }
+  </script>
+</body>
+</html>
