@@ -3,22 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-time Chat</title>
+    <title>Global Chat</title>
     <link rel="stylesheet" href="styleschat.css">
 </head>
 <body>
     <div class="chat-container">
         <header>
-            <h2>Online Users</h2>
+            <h1>Welcome to Global Chat</h1>
+            <div id="user-info">
+                <span id="username"></span> | <button id="logout-btn">Logout</button>
+            </div>
         </header>
 
         <div id="chat-area">
-            <!-- Messages will be inserted here -->
+            <!-- Public and private messages will be inserted here -->
         </div>
 
         <div class="input-container">
             <input type="text" id="message-input" placeholder="Type a message..." />
             <button id="send-btn">Send</button>
+        </div>
+
+        <div class="create-private-chat">
+            <h3>Create Private Chat</h3>
+            <input type="text" id="private-id" placeholder="Enter Private Chat ID" />
+            <input type="password" id="private-password" placeholder="Enter Private Chat Password" />
+            <button id="create-private-btn">Create Private Chat</button>
         </div>
 
         <footer>
