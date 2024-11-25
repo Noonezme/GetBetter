@@ -1,59 +1,61 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const mongoose = require('mongoose');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// Serve static files (e.g., images, CSS, JS)
+// Store private chats in a Map
+const privateChats = new Map();
+
+// Serve static files (if needed)
 app.use(express.static('public'));
 
-// MongoDB connection (you can replace this with your DB URI)
-mongoose.connect('mongodb://localhost/chat-app', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
-
-// User schema for MongoDB (used to store usernames and emails)
-const userSchema = new mongoose.Schema({
-    username: { type: String, required: true },
-    email: { type: String, required: true, unique: true }
-});
-
-const User = mongoose.model('User', userSchema);
-
-// Store connected users in memory (for simplicity)
-let onlineUsers = [];
-
+// Handle incoming WebSocket connections
 io.on('connection', (socket) => {
-    socket.on('join', (data) => {
-        const { username, email } = data;
-        
-        // Add user to online list
-        onlineUsers.push({ username, email });
-        io.emit('online-users', onlineUsers);
-
-        // Store user in database (you could use this to check if email exists)
-        const newUser = new User({ username, email });
-        newUser.save().catch(err => console.error('Error saving user:', err));
-    });
-
+    console.log('A user connected');
+    
+    // Listen for public chat messages
     socket.on('send-message', (data) => {
-        const { message, username, email } = data;
-        // Emit the message to all clients
-        io.emit('chat-message', { message, username, email });
+        io.emit('receive-message', data); // Broadcast to all users
     });
 
+    // Listen for private chat creation
+    socket.on('create-private-chat', (data) => {
+        const { username, privateId, privatePassword } = data;
+        const chatKey = `${privateId}:${privatePassword}`;
+        
+        // Check if the private chat already exists
+        if (!privateChats.has(chatKey)) {
+            privateChats.set(chatKey, []);
+        }
+
+        // Join the private chat
+        socket.join(chatKey);
+        io.to(chatKey).emit('receive-private-message', { username, message: `${username} has joined the private chat.` });
+    });
+
+    // Listen for messages in private chat
+    socket.on('send-private-message', (data) => {
+        const { privateId, privatePassword, message } = data;
+        const chatKey = `${privateId}:${privatePassword}`;
+
+        if (privateChats.has(chatKey)) {
+            io.to(chatKey).emit('receive-private-message', data);
+        } else {
+            socket.emit('receive-private-message', { username: 'System', message: 'Private chat not found.' });
+        }
+    });
+
+    // Handle user disconnection
     socket.on('disconnect', () => {
-        // Remove the user from online list when they disconnect
-        onlineUsers = onlineUsers.filter(user => user.email !== socket.email);
-        io.emit('online-users', onlineUsers);
+        console.log('A user disconnected');
     });
 });
 
 // Start the server
-server.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
