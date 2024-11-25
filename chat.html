@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Chat</title>
+    <link rel="stylesheet" href="styleschat.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h2>Online Users</h2>
+        </header>
+
+        <div id="chat-area">
+            <!-- Messages will be inserted here -->
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="message-input" placeholder="Type a message..." />
+            <button id="send-btn">Send</button>
+        </div>
+
+        <footer>
+            <p>Chat App powered by Vercel & Heroku</p>
+        </footer>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="jschat.js"></script>
+</body>
+</html>
