@@ -30,6 +30,7 @@
             padding: 12px 0;
             gap: 8px;
             overflow-y: auto;
+            flex-shrink: 0;
         }
 
         .server-icon {
@@ -73,6 +74,7 @@
             background: #2b2d31;
             display: flex;
             flex-direction: column;
+            flex-shrink: 0;
         }
 
         .server-header {
@@ -142,238 +144,364 @@
             color: #dbdee1;
         }
 
-        /* Zone de chat principale */
-        .chat-area {
+        /* Zone de présentation principale */
+        .presentation-area {
             flex: 1;
             display: flex;
             flex-direction: column;
             background: #313338;
             min-width: 0;
+            position: relative;
         }
 
-        .chat-header {
+        .presentation-header {
             height: 48px;
             padding: 0 16px;
             display: flex;
             align-items: center;
             border-bottom: 1px solid #26272b;
             gap: 8px;
-        }
-
-        .chat-header-title {
-            font-weight: 600;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message {
-            display: flex;
-            gap: 16px;
-            padding: 4px 16px;
-            margin-bottom: 4px;
-            position: relative;
-            min-height: 44px;
-        }
-
-        .message:hover {
-            background: #2e3035;
-        }
-
-        .message-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #5865f2, #7289da);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
             flex-shrink: 0;
         }
 
-        .message-content {
+        .header-title {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Container pour les slides */
+        .slides-container {
             flex: 1;
-            min-width: 0;
-        }
-
-        .message-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
-            flex-wrap: wrap;
-        }
-
-        .message-author {
-            font-weight: 600;
-            color: #f2f3f5;
-            font-size: 16px;
-        }
-
-        .message-timestamp {
-            font-size: 12px;
-            color: #949ba4;
-            font-weight: 400;
-        }
-
-        .message-text {
-            color: #dbdee1;
-            line-height: 1.375;
-            font-size: 16px;
-            word-wrap: break-word;
-        }
-
-        .message-text strong {
-            color: #f2f3f5;
-            font-weight: 600;
-        }
-
-        .message-list {
-            margin: 8px 0;
-            padding-left: 20px;
-            list-style-type: none;
-        }
-
-        .message-list li {
-            color: #dbdee1;
-            margin: 4px 0;
-            line-height: 1.5;
             position: relative;
-        }
-
-        .message-list li:before {
-            content: "•";
-            position: absolute;
-            left: -15px;
-            color: #949ba4;
-        }
-
-        .inline-list {
-            margin: 8px 0;
-        }
-
-        .inline-list .list-item {
-            color: #dbdee1;
-            margin: 4px 0;
-            line-height: 1.5;
-        }
-
-        .embed {
-            margin-top: 8px;
-            border-left: 4px solid #5865f2;
-            background: #2b2d31;
-            border-radius: 4px;
-            padding: 16px;
-            max-width: 520px;
-        }
-
-        .embed-title {
-            font-weight: 600;
-            color: #00b0f4;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        .embed-description {
-            color: #dbdee1;
-            line-height: 1.375;
-            font-size: 15px;
-        }
-
-        .pros-cons-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 12px;
-        }
-
-        .pros-cons-card {
-            background: #1e1f22;
-            padding: 16px;
-            border-radius: 8px;
-            border: 1px solid #26272b;
-        }
-
-        .pros-cons-title {
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 15px;
-        }
-
-        .pros-cons-title.pros {
-            color: #23a559;
-        }
-
-        .pros-cons-title.cons {
-            color: #f23f43;
-        }
-
-        .warning-box {
-            background: #f23f431a;
-            border: 1px solid #f23f43;
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 12px;
-        }
-
-        .warning-icon {
-            font-size: 24px;
-            color: #f23f43;
-            margin-right: 12px;
-            float: left;
-        }
-
-        .warning-text {
-            color: #f2f3f5;
-            line-height: 1.5;
             overflow: hidden;
         }
 
-        .warning-text strong {
-            color: #f2f3f5;
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
         }
 
-        /* Barre de saisie */
-        .chat-input {
-            padding: 16px;
-            background: #313338;
-            border-top: 1px solid #26272b;
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
         }
 
-        .input-wrapper {
-            background: #383a40;
-            border-radius: 8px;
-            padding: 12px 16px;
+        .slide.previous {
+            transform: translateX(-100%);
+        }
+
+        .slide-content {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Navigation arrows */
+        .navigation {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .nav-arrow {
+            background: #1e1f22;
+            border: none;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: all;
+            transition: background-color 0.2s;
+            font-size: 20px;
+        }
+
+        .nav-arrow:hover {
+            background: #5865f2;
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: #1e1f22;
+        }
+
+        /* Slide indicators */
+        .slide-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4f545c;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .indicator.active {
+            background: #fff;
+            transform: scale(1.2);
+        }
+
+        .indicator:hover {
+            background: #dbdee1;
+        }
+
+        /* Contenu des slides */
+        .slide-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .slide-subtitle {
+            font-size: 18px;
+            color: #b5bac1;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .slide-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .slide-list li {
+            padding: 12px 0;
+            padding-left: 40px;
+            position: relative;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .slide-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #5865f2;
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: #2b2d31;
+            border-left: 4px solid #5865f2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight-title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .highlight-text {
+            color: #b5bac1;
+            line-height: 1.5;
+        }
+
+        /* Tabs pour les paramètres */
+        .settings-tabs {
+            display: flex;
+            gap: 2px;
+            background: #1e1f22;
+            border-radius: 8px;
+            padding: 4px;
+            margin: 20px 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            color: #b5bac1;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            background: #2b2d31;
+            color: #fff;
+        }
+
+        .tab.active {
+            background: #5865f2;
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .settings-section {
+            background: #2b2d31;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .settings-title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-description {
+            color: #b5bac1;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .settings-step {
+            background: #1e1f22;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 12px 0;
+            display: flex;
+            align-items: flex-start;
             gap: 12px;
         }
 
-        .input-field {
-            flex: 1;
-            background: none;
-            border: none;
-            color: #dbdee1;
-            font-size: 15px;
-            outline: none;
-            font-family: inherit;
+        .step-number {
+            background: #5865f2;
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
         }
 
-        .input-field::placeholder {
-            color: #6d6f78;
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .step-description {
+            color: #b5bac1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .danger-button {
+            background: #f23f43;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .danger-button:hover {
+            background: #da373c;
+        }
+
+        .warning-note {
+            background: #f23f431a;
+            border: 1px solid #f23f43;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 15px 0;
+            color: #f2f3f5;
+        }
+
+        /* Barre d'information */
+        .info-bar {
+            padding: 16px;
+            background: #313338;
+            border-top: 1px solid #26272b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .slide-counter {
+            color: #b5bac1;
+            font-size: 14px;
+        }
+
+        .fullscreen-button {
+            background: #5865f2;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .fullscreen-button:hover {
+            background: #4752c4;
         }
 
         /* Sidebar droite */
@@ -463,6 +591,10 @@
             background: #26272b;
         }
 
+        .slide::-webkit-scrollbar-track {
+            background: #2b2d31;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .members-sidebar {
@@ -477,49 +609,38 @@
             .channels-sidebar {
                 width: 200px;
             }
+            .slide {
+                padding: 20px;
+            }
+            .slide-title {
+                font-size: 24px;
+            }
         }
 
-        .no-scroll {
-            overflow: hidden !important;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: #2b2d31;
-        }
-
-        /* Message separators */
-        .message-divider {
-            height: 1px;
-            background: #42454a;
-            margin: 16px 0;
-        }
-
-        /* Date separator */
-        .date-divider {
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .date-divider:before {
-            content: "";
+        /* Keyboard shortcuts hint */
+        .keyboard-hint {
             position: absolute;
-            left: 0;
-            right: 0;
-            top: 50%;
-            height: 1px;
-            background: #42454a;
-            z-index: 1;
+            bottom: 20px;
+            right: 20px;
+            background: #1e1f22;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #b5bac1;
+            display: none;
         }
 
-        .date-divider span {
-            background: #313338;
-            padding: 0 12px;
-            color: #949ba4;
-            font-size: 12px;
-            font-weight: 600;
-            position: relative;
-            z-index: 2;
+        .keyboard-hint.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .key {
+            background: #2b2d31;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 0 2px;
         }
     </style>
 </head>
@@ -551,186 +672,454 @@
         <div class="channels-list">
             <div class="channel-category">
                 <span>▼</span>
-                <span>INFORMATIONS</span>
+                <span>PRÉSENTATION</span>
             </div>
-            <div class="channel-item active">
-                <span class="channel-icon">#</span>
-                <span>introduction</span>
+            <div class="channel-item active" data-slide="0">
+                <span class="channel-icon">📱</span>
+                <span>Qu'est-ce que Discord ?</span>
             </div>
-            <div class="channel-item">
-                <span class="channel-icon">#</span>
-                <span>fonctionnement</span>
+            <div class="channel-item" data-slide="1">
+                <span class="channel-icon">⚙️</span>
+                <span>Comment ça marche</span>
             </div>
-            <div class="channel-item">
-                <span class="channel-icon">#</span>
-                <span>utilisation</span>
+            <div class="channel-item" data-slide="2">
+                <span class="channel-icon">🎯</span>
+                <span>À quoi ça sert</span>
             </div>
-            <div class="channel-item">
-                <span class="channel-icon">#</span>
-                <span>avantages-inconvénients</span>
+            <div class="channel-item" data-slide="3">
+                <span class="channel-icon">⚖️</span>
+                <span>Avantages & Inconvénients</span>
+            </div>
+            
+            <div class="channel-category">
+                <span>▼</span>
+                <span>PARAMÈTRES</span>
+            </div>
+            <div class="channel-item" data-slide="4">
+                <span class="channel-icon">⚙️</span>
+                <span>Paramètres utilisateur</span>
+            </div>
+            <div class="channel-item" data-slide="5">
+                <span class="channel-icon">🔒</span>
+                <span>Confidentialité</span>
+            </div>
+            <div class="channel-item" data-slide="6">
+                <span class="channel-icon">⚠️</span>
+                <span>Supprimer compte</span>
             </div>
         </div>
     </div>
 
-    <!-- Zone de chat principale -->
-    <div class="chat-area">
-        <div class="chat-header">
-            <div class="chat-header-title">
-                <span class="channel-icon">#</span>
-                <span>introduction</span>
+    <!-- Zone de présentation -->
+    <div class="presentation-area">
+        <div class="presentation-header">
+            <div class="header-title">
+                <span class="channel-icon">📱</span>
+                <span>Présentation Discord</span>
             </div>
         </div>
         
-        <div class="chat-messages">
-            <!-- Date separator -->
-            <div class="date-divider">
-                <span>Aujourd'hui</span>
-            </div>
-
-            <!-- Message 1: Qu'est-ce que Discord -->
-            <div class="message">
-                <div class="message-avatar">📱</div>
-                <div class="message-content">
-                    <div class="message-header">
-                        <span class="message-author">Professeur</span>
-                        <span class="message-timestamp">14:30</span>
-                    </div>
-                    <div class="message-text">
-                        <strong>1. Qu'est-ce que Discord ?</strong>
-                    </div>
-                    <div class="embed">
-                        <div class="embed-title">Bienvenue sur Discord !</div>
-                        <div class="embed-description">
-                            Discord est une plateforme de communication créée en 2015.<br><br>
-                            Elle permet de discuter :
-                        </div>
-                        <ul class="message-list">
-                            <li>par messages écrits</li>
-                            <li>par appels vocaux</li>
-                            <li>par appels vidéo</li>
+        <!-- Container pour les slides -->
+        <div class="slides-container">
+            <!-- Slide 1: Qu'est-ce que Discord -->
+            <div class="slide active" id="slide-0">
+                <div class="slide-content">
+                    <h1 class="slide-title">Qu'est-ce que Discord ?</h1>
+                    <p class="slide-subtitle">Une plateforme de communication créée en 2015 pour les communautés</p>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title">💬 Communication multi-formats</div>
+                        <p class="highlight-text">Discord permet de communiquer de différentes manières :</p>
+                        <ul class="slide-list">
+                            <li><strong>Messages écrits</strong> - Conversations textuelles instantanées</li>
+                            <li><strong>Appels vocaux</strong> - Discussions audio en temps réel</li>
+                            <li><strong>Appels vidéo</strong> - Visioconférences avec partage d'écran</li>
                         </ul>
-                        <div class="embed-description" style="margin-top: 12px;">
-                            On peut l'utiliser sur <strong>ordinateur, téléphone ou tablette</strong>, et l'inscription est <strong>gratuite</strong>.
-                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Message 2: Comment fonctionne Discord -->
-            <div class="message">
-                <div class="message-avatar">⚙️</div>
-                <div class="message-content">
-                    <div class="message-header">
-                        <span class="message-author">Professeur</span>
-                        <span class="message-timestamp">14:32</span>
-                    </div>
-                    <div class="message-text">
-                        <strong>2. Comment fonctionne Discord ?</strong>
-                    </div>
-                    <div class="embed">
-                        <div class="embed-title">Les Serveurs Discord</div>
-                        <div class="embed-description">
-                            Sur Discord, on utilise des <strong>serveurs</strong>.<br>
-                            Un serveur est un espace privé ou public où plusieurs personnes peuvent discuter.<br><br>
-                            Dans un serveur, il y a :
-                        </div>
-                        <ul class="message-list">
-                            <li>des salons textuels pour écrire</li>
-                            <li>des salons vocaux pour parler en direct</li>
+                    <div class="highlight-box">
+                        <div class="highlight-title">📱 Accessible partout</div>
+                        <ul class="slide-list">
+                            <li>Disponible sur <strong>ordinateur, téléphone ou tablette</strong></li>
+                            <li>Synchronisation entre tous les appareils</li>
+                            <li>Application web ou desktop</li>
+                            <li><strong>Inscription gratuite</strong> avec options premium</li>
                         </ul>
-                        <div class="embed-description" style="margin-top: 12px;">
-                            Chaque utilisateur a un profil, avec un pseudo et une photo.<br>
-                            On peut aussi envoyer des images, vidéos et fichiers.
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Message 3: À quoi sert Discord -->
-            <div class="message">
-                <div class="message-avatar">🎯</div>
-                <div class="message-content">
-                    <div class="message-header">
-                        <span class="message-author">Professeur</span>
-                        <span class="message-timestamp">14:34</span>
-                    </div>
-                    <div class="message-text">
-                        <strong>3. À quoi sert Discord ?</strong>
-                    </div>
-                    <div class="embed">
-                        <div class="embed-title">Les Utilisations de Discord</div>
-                        <div class="embed-description">
-                            Discord sert à :
-                        </div>
-                        <ul class="message-list">
-                            <li>discuter entre amis</li>
-                            <li>travailler en groupe pour les devoirs</li>
-                            <li>organiser des projets</li>
-                            <li>rejoindre des communautés (jeux, musique, sport, études…)</li>
+            <!-- Slide 2: Comment ça marche -->
+            <div class="slide" id="slide-1">
+                <div class="slide-content">
+                    <h1 class="slide-title">Comment fonctionne Discord ?</h1>
+                    <p class="slide-subtitle">Les serveurs : des espaces de communication organisés</p>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title">🏠 Les serveurs Discord</div>
+                        <ul class="slide-list">
+                            <li>Un <strong>serveur</strong> est un espace privé ou public où plusieurs personnes peuvent discuter</li>
+                            <li>Chaque serveur peut avoir sa propre organisation et ses règles</li>
+                            <li>Création gratuite de serveurs illimités</li>
                         </ul>
-                        <div class="embed-description" style="margin-top: 12px;">
-                            Beaucoup d'élèves l'utilisent pour réviser ensemble ou s'aider pour les devoirs.
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">💬 Les salons de discussion</div>
+                        <ul class="slide-list">
+                            <li><strong>Salons textuels</strong> (#) pour écrire des messages</li>
+                            <li><strong>Salons vocaux</strong> (🔊) pour parler en direct</li>
+                            <li><strong>Salons catégorisés</strong> pour organiser les discussions</li>
+                            <li>Salons privés et publics</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">👤 Le profil utilisateur</div>
+                        <ul class="slide-list">
+                            <li>Pseudo unique avec tag (ex: Utilisateur#1234)</li>
+                            <li>Photo de profil personnalisable</li>
+                            <li>Statut (en ligne, absent, ne pas déranger, invisible)</li>
+                            <li>Biographie et liens sociaux</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: À quoi ça sert -->
+            <div class="slide" id="slide-2">
+                <div class="slide-content">
+                    <h1 class="slide-title">À quoi sert Discord ?</h1>
+                    <p class="slide-subtitle">Une plateforme polyvalente pour tous les besoins</p>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title">🎓 Pour les étudiants</div>
+                        <ul class="slide-list">
+                            <li><strong>Révisions en groupe</strong> - Étudier ensemble à distance</li>
+                            <li><strong>Aide aux devoirs</strong> - S'entraider pour comprendre les cours</li>
+                            <li><strong>Travail de groupe</strong> - Collaboration sur des projets scolaires</li>
+                            <li><strong>Partage de ressources</strong> - Documents, fiches de révision, exercices</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">👥 Pour les communautés</div>
+                        <ul class="slide-list">
+                            <li><strong>Jeux vidéo</strong> - Équipes, guildes, communautés de streamers</li>
+                            <li><strong>Centres d'intérêt</strong> - Musique, sport, art, technologie</li>
+                            <li><strong>Clubs et associations</strong> - Organisation d'événements</li>
+                            <li><strong>Projets collaboratifs</strong> - Développement, création, recherche</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">💼 Pour le professionnel</div>
+                        <ul class="slide-list">
+                            <li>Communication d'équipe</li>
+                            <li>Organisation de projets</li>
+                            <li>Réunions à distance</li>
+                            <li>Support communautaire</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Avantages et Inconvénients -->
+            <div class="slide" id="slide-3">
+                <div class="slide-content">
+                    <h1 class="slide-title">Avantages & Inconvénients</h1>
+                    <p class="slide-subtitle">Les points forts et les précautions à prendre</p>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title">✅ Points forts</div>
+                        <ul class="slide-list">
+                            <li><strong>Facile à utiliser</strong> - Interface intuitive et accessible</li>
+                            <li><strong>Gratuit</strong> - Toutes les fonctions essentielles sont gratuites</li>
+                            <li><strong>Communication rapide</strong> - Messages instantanés et fluides</li>
+                            <li><strong>Multi-plateforme</strong> - PC, mobile, tablette, navigateur</li>
+                            <li><strong>Personnalisable</strong> - Serveurs, rôles, bots, thèmes</li>
+                            <li><strong>Qualité audio/vidéo</strong> - Excellente qualité des appels</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">⚠️ Précautions à prendre</div>
+                        <ul class="slide-list">
+                            <li><strong>Perte de temps</strong> - Peut devenir addictif</li>
+                            <li><strong>Distraction</strong> - Notifications constantes</li>
+                            <li><strong>Sécurité</strong> - Risques si mal configuré</li>
+                            <li><strong>Harcèlement en ligne</strong> - Possible dans certains serveurs</li>
+                            <li><strong>Vie privée</strong> - Attention aux informations partagées</li>
+                            <li><strong>Données personnelles</strong> - Lisez la politique de confidentialité</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-note">
+                        <strong>Conseil important :</strong> Toujours vérifier les paramètres de confidentialité et ne jamais partager d'informations personnelles sensibles.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Paramètres utilisateur -->
+            <div class="slide" id="slide-4">
+                <div class="slide-content">
+                    <h1 class="slide-title">Paramètres utilisateur</h1>
+                    <p class="slide-subtitle">Personnalisez votre expérience Discord</p>
+                    
+                    <div class="settings-tabs" id="settings-tabs">
+                        <button class="tab active" data-tab="account">Compte</button>
+                        <button class="tab" data-tab="profile">Profil</button>
+                        <button class="tab" data-tab="notifications">Notifications</button>
+                        <button class="tab" data-tab="accessibility">Accessibilité</button>
+                    </div>
+
+                    <!-- Onglet Compte -->
+                    <div class="tab-content active" id="account-tab">
+                        <div class="settings-section">
+                            <div class="settings-title">📧 Adresse e-mail</div>
+                            <p class="settings-description">L'adresse e-mail associée à votre compte Discord.</p>
+                            <div class="settings-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <div class="step-title">Accéder aux paramètres</div>
+                                    <div class="step-description">Cliquez sur l'engrenage ⚙️ en bas à gauche de l'application</div>
+                                </div>
+                            </div>
+                            <div class="settings-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <div class="step-title">Section "Mon compte"</div>
+                                    <div class="step-description">Cliquez sur "Modifier" à côté de l'adresse e-mail</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="settings-title">🔑 Mot de passe</div>
+                            <p class="settings-description">Changez votre mot de passe régulièrement pour la sécurité.</p>
+                            <div class="settings-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <div class="step-title">Accéder aux paramètres</div>
+                                    <div class="step-description">Paramètres → Mon compte</div>
+                                </div>
+                            </div>
+                            <div class="settings-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <div class="step-title">Changer le mot de passe</div>
+                                    <div class="step-description">Cliquez sur "Changer le mot de passe"</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Profil -->
+                    <div class="tab-content" id="profile-tab">
+                        <div class="settings-section">
+                            <div class="settings-title">🖼️ Photo de profil</div>
+                            <p class="settings-description">Personnalisez votre photo de profil.</p>
+                            <div class="settings-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <div class="step-title">Paramètres utilisateur</div>
+                                    <div class="step-description">Cliquez sur votre avatar en bas à gauche</div>
+                                </div>
+                            </div>
+                            <div class="settings-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <div class="step-title">Changer la photo</div>
+                                    <div class="step-description">Cliquez sur votre photo actuelle pour la changer</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Notifications -->
+                    <div class="tab-content" id="notifications-tab">
+                        <div class="settings-section">
+                            <div class="settings-title">🔔 Gérer les notifications</div>
+                            <p class="settings-description">Contrôlez quand et comment vous recevez des notifications.</p>
+                            <div class="settings-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <div class="step-title">Paramètres des notifications</div>
+                                    <div class="step-description">Paramètres → Notifications</div>
+                                </div>
+                            </div>
+                            <div class="settings-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <div class="step-title">Personnaliser</div>
+                                    <div class="step-description">Ajustez les paramètres pour chaque serveur</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Accessibilité -->
+                    <div class="tab-content" id="accessibility-tab">
+                        <div class="settings-section">
+                            <div class="settings-title">♿ Options d'accessibilité</div>
+                            <p class="settings-description">Personnalisez Discord pour vos besoins spécifiques.</p>
+                            <div class="settings-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <div class="step-title">Accéder aux paramètres</div>
+                                    <div class="step-description">Paramètres → Accessibilité</div>
+                                </div>
+                            </div>
+                            <div class="settings-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <div class="step-title">Options disponibles</div>
+                                    <div class="step-description">Réduction du mouvement, taille du texte, contraste, etc.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Message 4: Avantages et inconvénients -->
-            <div class="message">
-                <div class="message-avatar">⚖️</div>
-                <div class="message-content">
-                    <div class="message-header">
-                        <span class="message-author">Professeur</span>
-                        <span class="message-timestamp">14:36</span>
-                    </div>
-                    <div class="message-text">
-                        <strong>4. Avantages et inconvénients</strong>
-                    </div>
-                    <div class="pros-cons-grid">
-                        <div class="pros-cons-card">
-                            <div class="pros-cons-title pros">
-                                ✅ Avantages
-                            </div>
-                            <div class="inline-list">
-                                <div class="list-item">facile à utiliser</div>
-                                <div class="list-item">gratuit</div>
-                                <div class="list-item">communication rapide</div>
-                                <div class="list-item">pratique pour le travail en groupe</div>
+            <!-- Slide 6: Confidentialité -->
+            <div class="slide" id="slide-5">
+                <div class="slide-content">
+                    <h1 class="slide-title">Paramètres de confidentialité</h1>
+                    <p class="slide-subtitle">Protégez votre vie privée sur Discord</p>
+                    
+                    <div class="settings-section">
+                        <div class="settings-title">👁️ Qui peut vous voir</div>
+                        <div class="settings-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Accéder aux paramètres</div>
+                                <div class="step-description">Paramètres → Confidentialité et sécurité</div>
                             </div>
                         </div>
-                        <div class="pros-cons-card">
-                            <div class="pros-cons-title cons">
-                                ⚠️ Inconvénients
+                        <div class="settings-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">"Messages privés"</div>
+                                <div class="step-description">Décidez qui peut vous envoyer des messages</div>
                             </div>
-                            <div class="inline-list">
-                                <div class="list-item">peut faire perdre du temps</div>
-                                <div class="list-item">risque de distraction</div>
-                                <div class="list-item">attention à la sécurité et au harcèlement en ligne</div>
+                        </div>
+                        <div class="settings-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">"Appels vocaux"</div>
+                                <div class="step-description">Limitez qui peut vous appeler directement</div>
                             </div>
                         </div>
                     </div>
-                    <div class="warning-box">
-                        <div class="warning-icon">⚠️</div>
-                        <div class="warning-text">
-                            <strong>Important :</strong> Il est donc important de bien régler la confidentialité et de rester prudent.
+
+                    <div class="settings-section">
+                        <div class="settings-title">🔍 Comment vous trouver</div>
+                        <p class="settings-description">Contrôlez comment les autres utilisateurs peuvent vous trouver.</p>
+                        <div class="settings-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Paramètres de découverte</div>
+                                <div class="step-description">Désactivez "Autoriser la découverte de serveurs" si nécessaire</div>
+                            </div>
                         </div>
+                        <div class="settings-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Amis</div>
+                                <div class="step-description">Choisissez qui peut vous ajouter comme ami</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="warning-note">
+                        <strong>Conseil :</strong> Limitez les demandes d'ami aux "Amis d'amis" pour plus de sécurité.
                     </div>
                 </div>
+            </div>
+
+            <!-- Slide 7: Supprimer compte -->
+            <div class="slide" id="slide-6">
+                <div class="slide-content">
+                    <h1 class="slide-title">Supprimer votre compte</h1>
+                    <p class="slide-subtitle">Procédure pour supprimer définitivement votre compte Discord</p>
+                    
+                    <div class="warning-note">
+                        ⚠️ <strong>Attention :</strong> La suppression de compte est irréversible. Toutes vos données, messages et serveurs seront perdus définitivement.
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Accéder aux paramètres</div>
+                                <div class="step-description">Ouvrez les paramètres utilisateur (⚙️)</div>
+                            </div>
+                        </div>
+                        <div class="settings-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Mes paramètres</div>
+                                <div class="step-description">Cliquez sur "Mes paramètres"</div>
+                            </div>
+                        </div>
+                        <div class="settings-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Supprimer le compte</div>
+                                <div class="step-description">Allez dans "Supprimer le compte" en bas</div>
+                            </div>
+                        </div>
+                        <div class="settings-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Confirmation</div>
+                                <div class="step-description">Entrez votre mot de passe pour confirmer</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-title">📋 Avant de supprimer</div>
+                        <ul class="slide-list">
+                            <li><strong>Sauvegardez</strong> les messages importants</li>
+                            <li><strong>Transférez la propriété</strong> des serveurs que vous avez créés</li>
+                            <li><strong>Informez vos amis</strong> si nécessaire</li>
+                            <li><strong>Annulez les abonnements</strong> Discord Nitro</li>
+                        </ul>
+                    </div>
+
+                    <div class="settings-section">
+                        <button class="danger-button" id="delete-account-btn">
+                            ⚠️ Voir la procédure de suppression détaillée
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation arrows -->
+            <div class="navigation">
+                <button class="nav-arrow" id="prev-slide" aria-label="Slide précédent">←</button>
+                <button class="nav-arrow" id="next-slide" aria-label="Slide suivant">→</button>
+            </div>
+
+            <!-- Slide indicators -->
+            <div class="slide-indicators" id="slide-indicators">
+                <!-- Will be generated by JavaScript -->
             </div>
         </div>
 
-        <!-- Barre de saisie -->
-        <div class="chat-input">
-            <div class="input-wrapper">
-                <input type="text" class="input-field" placeholder="Écrire un message dans #introduction">
-            </div>
+        <!-- Barre d'information -->
+        <div class="info-bar">
+            <div class="slide-counter">Slide <span id="current-slide">1</span> sur <span id="total-slides">7</span></div>
+            <button class="fullscreen-button" id="fullscreen-btn">Plein écran</button>
         </div>
     </div>
 
     <!-- Sidebar droite -->
     <div class="members-sidebar">
         <div class="members-group">
-            <div class="members-group-title">MEMBRES — 2</div>
+            <div class="members-group-title">EN LIGNE — 3</div>
             <div class="member-item">
                 <div class="member-avatar">P</div>
                 <div class="member-status"></div>
@@ -739,52 +1128,247 @@
             <div class="member-item">
                 <div class="member-avatar">E</div>
                 <div class="member-status"></div>
-                <div class="member-name">Élève</div>
+                <div class="member-name">Élève 1</div>
+            </div>
+            <div class="member-item">
+                <div class="member-avatar">E</div>
+                <div class="member-status"></div>
+                <div class="member-name">Élève 2</div>
+            </div>
+        </div>
+        <div class="members-group">
+            <div class="members-group-title">HORS LIGNE — 2</div>
+            <div class="member-item">
+                <div class="member-avatar">E</div>
+                <div class="member-status" style="background: #80848e"></div>
+                <div class="member-name">Élève 3</div>
+            </div>
+            <div class="member-item">
+                <div class="member-avatar">E</div>
+                <div class="member-status" style="background: #80848e"></div>
+                <div class="member-name">Élève 4</div>
             </div>
         </div>
     </div>
 
+    <!-- Keyboard shortcuts hint -->
+    <div class="keyboard-hint" id="keyboard-hint">
+        Raccourcis : <span class="key">←</span> <span class="key">→</span> navigation • <span class="key">F11</span> plein écran
+    </div>
+
     <script>
-        // Highlight active channels
-        document.querySelectorAll('.channel-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update chat header title
-                const channelName = this.querySelector('span:last-child').textContent;
-                document.querySelector('.chat-header-title span:last-child').textContent = channelName;
-                
-                // Update input placeholder
-                document.querySelector('.input-field').placeholder = `Écrire un message dans #${channelName}`;
-            });
+        // Configuration des slides
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+        let keyboardHintTimeout;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSlideIndicators();
+            updateSlideCounter();
+            setupTabs();
+            setupEventListeners();
         });
 
-        // Highlight active servers
-        document.querySelectorAll('.server-icon').forEach(icon => {
-            icon.addEventListener('click', function() {
-                document.querySelectorAll('.server-icon').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
+        // Mettre à jour les indicateurs de slide
+        function updateSlideIndicators() {
+            const indicatorsContainer = document.getElementById('slide-indicators');
+            indicatorsContainer.innerHTML = '';
+            
+            for (let i = 0; i < totalSlides; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = `indicator ${i === currentSlide ? 'active' : ''}`;
+                indicator.dataset.index = i;
+                indicator.addEventListener('click', () => goToSlide(i));
+                indicatorsContainer.appendChild(indicator);
+            }
+        }
+
+        // Mettre à jour le compteur de slides
+        function updateSlideCounter() {
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('total-slides').textContent = totalSlides;
+        }
+
+        // Aller à un slide spécifique
+        function goToSlide(slideIndex) {
+            if (slideIndex < 0 || slideIndex >= totalSlides) return;
+            
+            const oldSlide = currentSlide;
+            currentSlide = slideIndex;
+            
+            // Mettre à jour les slides
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'previous');
+                if (index === slideIndex) {
+                    slide.classList.add('active');
+                } else if (index === oldSlide) {
+                    slide.classList.add('previous');
+                }
             });
-        });
+            
+            // Mettre à jour les canaux actifs
+            updateActiveChannel();
+            updateSlideIndicators();
+            updateSlideCounter();
+            
+            // Mettre à jour la flèche précédente
+            document.getElementById('prev-slide').disabled = currentSlide === 0;
+            document.getElementById('next-slide').disabled = currentSlide === totalSlides - 1;
+        }
 
-        // Auto-scroll to bottom of messages
-        const chatMessages = document.querySelector('.chat-messages');
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Slide suivant
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
 
-        // Input field interaction
-        const inputField = document.querySelector('.input-field');
-        inputField.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && this.value.trim()) {
-                e.preventDefault();
-                this.value = '';
+        // Slide précédent
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // Mettre à jour le canal actif
+        function updateActiveChannel() {
+            document.querySelectorAll('.channel-item').forEach(item => {
+                item.classList.remove('active');
+                if (parseInt(item.dataset.slide) === currentSlide) {
+                    item.classList.add('active');
+                    // Mettre à jour l'icône dans le header
+                    const icon = item.querySelector('.channel-icon').textContent;
+                    document.querySelector('.header-title .channel-icon').textContent = icon;
+                    // Mettre à jour le titre
+                    const title = item.querySelector('span:last-child').textContent;
+                    document.querySelector('.header-title span:last-child').textContent = title;
+                }
+            });
+        }
+
+        // Configuration des onglets
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // Mettre à jour les onglets actifs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mettre à jour le contenu actif
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${tabId}-tab`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+
+        // Configuration des événements
+        function setupEventListeners() {
+            // Navigation avec les flèches
+            document.getElementById('prev-slide').addEventListener('click', prevSlide);
+            document.getElementById('next-slide').addEventListener('click', nextSlide);
+            
+            // Navigation avec les touches du clavier
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                    showKeyboardHint();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    showKeyboardHint();
+                } else if (e.key === 'f' || e.key === 'F') {
+                    toggleFullscreen();
+                    showKeyboardHint();
+                }
+            });
+            
+            // Navigation avec les canaux
+            document.querySelectorAll('.channel-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const slideIndex = parseInt(this.dataset.slide);
+                    goToSlide(slideIndex);
+                });
+            });
+            
+            // Bouton plein écran
+            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+            
+            // Bouton de suppression de compte
+            document.getElementById('delete-account-btn').addEventListener('click', function() {
+                alert('Attention : La suppression de compte est définitive.\n\nPour supprimer votre compte Discord :\n1. Ouvrez les paramètres utilisateur (⚙️)\n2. Allez dans "Mes paramètres"\n3. Cliquez sur "Supprimer le compte"\n4. Entrez votre mot de passe pour confirmer\n\n⚠️ Toutes vos données seront perdues définitivement !');
+            });
+            
+            // Serveurs
+            document.querySelectorAll('.server-icon').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    document.querySelectorAll('.server-icon').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Click sur le contenu pour cacher l'indication clavier
+            document.querySelector('.slides-container').addEventListener('click', hideKeyboardHint);
+            
+            // Navigation avec la molette (optionnel)
+            document.addEventListener('wheel', function(e) {
+                if (e.deltaY > 0) {
+                    nextSlide();
+                } else if (e.deltaY < 0) {
+                    prevSlide();
+                }
+                showKeyboardHint();
+            });
+        }
+
+        // Plein écran
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Erreur plein écran: ${err.message}`);
+                });
+                document.getElementById('fullscreen-btn').textContent = 'Quitter plein écran';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    document.getElementById('fullscreen-btn').textContent = 'Plein écran';
+                }
+            }
+        }
+
+        // Afficher les raccourcis clavier
+        function showKeyboardHint() {
+            const hint = document.getElementById('keyboard-hint');
+            hint.classList.add('show');
+            
+            clearTimeout(keyboardHintTimeout);
+            keyboardHintTimeout = setTimeout(() => {
+                hint.classList.remove('show');
+            }, 2000);
+        }
+
+        function hideKeyboardHint() {
+            document.getElementById('keyboard-hint').classList.remove('show');
+        }
+
+        // Gestion du plein écran
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement) {
+                document.getElementById('fullscreen-btn').textContent = 'Plein écran';
             }
         });
 
-        // Focus input field when clicking chat area
-        document.querySelector('.chat-messages').addEventListener('click', () => {
-            inputField.focus();
-        });
+        // Initialiser les flèches de navigation
+        document.getElementById('prev-slide').disabled = true;
     </script>
 </body>
 </html>
