@@ -9,10 +9,10 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         body {
-            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             background: #313338;
             color: #dbdee1;
             display: flex;
@@ -84,6 +84,7 @@
             border-bottom: 1px solid #1e1f22;
             font-weight: 600;
             cursor: pointer;
+            user-select: none;
         }
 
         .server-header:hover {
@@ -106,6 +107,7 @@
             align-items: center;
             gap: 4px;
             cursor: pointer;
+            user-select: none;
         }
 
         .channel-item {
@@ -118,6 +120,7 @@
             gap: 8px;
             color: #949ba4;
             font-size: 16px;
+            user-select: none;
         }
 
         .channel-item:hover {
@@ -145,6 +148,7 @@
             display: flex;
             flex-direction: column;
             background: #313338;
+            min-width: 0;
         }
 
         .chat-header {
@@ -168,14 +172,17 @@
             flex: 1;
             overflow-y: auto;
             padding: 16px;
+            display: flex;
+            flex-direction: column;
         }
 
         .message {
             display: flex;
             gap: 16px;
             padding: 4px 16px;
-            margin-bottom: 16px;
+            margin-bottom: 4px;
             position: relative;
+            min-height: 44px;
         }
 
         .message:hover {
@@ -196,38 +203,66 @@
 
         .message-content {
             flex: 1;
+            min-width: 0;
         }
 
         .message-header {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             gap: 8px;
             margin-bottom: 4px;
+            flex-wrap: wrap;
         }
 
         .message-author {
             font-weight: 600;
             color: #f2f3f5;
-            font-size: 15px;
+            font-size: 16px;
         }
 
         .message-timestamp {
             font-size: 12px;
             color: #949ba4;
+            font-weight: 400;
         }
 
         .message-text {
             color: #dbdee1;
             line-height: 1.375;
             font-size: 16px;
+            word-wrap: break-word;
+        }
+
+        .message-text strong {
+            color: #f2f3f5;
+            font-weight: 600;
         }
 
         .message-list {
             margin: 8px 0;
             padding-left: 20px;
+            list-style-type: none;
         }
 
         .message-list li {
+            color: #dbdee1;
+            margin: 4px 0;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message-list li:before {
+            content: "•";
+            position: absolute;
+            left: -15px;
+            color: #949ba4;
+        }
+
+        .inline-list {
+            margin: 8px 0;
+        }
+
+        .inline-list .list-item {
             color: #dbdee1;
             margin: 4px 0;
             line-height: 1.5;
@@ -252,37 +287,7 @@
         .embed-description {
             color: #dbdee1;
             line-height: 1.375;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .feature-item {
-            background: #1e1f22;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #26272b;
-        }
-
-        .feature-item-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .feature-item-title {
-            font-weight: 600;
-            color: #f2f3f5;
-            margin-bottom: 4px;
-            font-size: 14px;
-        }
-
-        .feature-item-desc {
-            color: #949ba4;
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .pros-cons-grid {
@@ -322,41 +327,30 @@
             border-radius: 8px;
             padding: 16px;
             margin-top: 12px;
-            display: flex;
-            gap: 12px;
         }
 
         .warning-icon {
             font-size: 24px;
             color: #f23f43;
+            margin-right: 12px;
+            float: left;
         }
 
         .warning-text {
             color: #f2f3f5;
             line-height: 1.5;
+            overflow: hidden;
         }
 
-        .wumpus-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .wumpus-svg {
-            width: 120px;
-            height: 120px;
-            animation: wumpusBounce 2s infinite;
-        }
-
-        @keyframes wumpusBounce {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-10px) rotate(-5deg); }
-            50% { transform: translateY(0) rotate(0deg); }
-            75% { transform: translateY(-5px) rotate(5deg); }
+        .warning-text strong {
+            color: #f2f3f5;
         }
 
         /* Barre de saisie */
         .chat-input {
             padding: 16px;
+            background: #313338;
+            border-top: 1px solid #26272b;
         }
 
         .input-wrapper {
@@ -375,6 +369,7 @@
             color: #dbdee1;
             font-size: 15px;
             outline: none;
+            font-family: inherit;
         }
 
         .input-field::placeholder {
@@ -387,6 +382,7 @@
             background: #2b2d31;
             padding: 16px 8px;
             overflow-y: auto;
+            flex-shrink: 0;
         }
 
         .members-group {
@@ -426,6 +422,7 @@
             justify-content: center;
             font-size: 14px;
             position: relative;
+            flex-shrink: 0;
         }
 
         .member-status {
@@ -442,8 +439,12 @@
         .member-name {
             color: #dbdee1;
             font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -462,6 +463,7 @@
             background: #26272b;
         }
 
+        /* Responsive */
         @media (max-width: 1024px) {
             .members-sidebar {
                 display: none;
@@ -475,6 +477,49 @@
             .channels-sidebar {
                 width: 200px;
             }
+        }
+
+        .no-scroll {
+            overflow: hidden !important;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #2b2d31;
+        }
+
+        /* Message separators */
+        .message-divider {
+            height: 1px;
+            background: #42454a;
+            margin: 16px 0;
+        }
+
+        /* Date separator */
+        .date-divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .date-divider:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: #42454a;
+            z-index: 1;
+        }
+
+        .date-divider span {
+            background: #313338;
+            padding: 0 12px;
+            color: #949ba4;
+            font-size: 12px;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
@@ -524,40 +569,6 @@
                 <span class="channel-icon">#</span>
                 <span>avantages-inconvénients</span>
             </div>
-            
-            <div class="channel-category">
-                <span>▼</span>
-                <span>RESSOURCES</span>
-            </div>
-            <div class="channel-item">
-                <span class="channel-icon">#</span>
-                <span>guides</span>
-            </div>
-            <div class="channel-item">
-                <span class="channel-icon">#</span>
-                <span>sécurité</span>
-            </div>
-            <div class="channel-item">
-                <span class="channel-icon">#</span>
-                <span>tutoriels</span>
-            </div>
-            
-            <div class="channel-category">
-                <span>▼</span>
-                <span>VOCAL</span>
-            </div>
-            <div class="channel-item">
-                <span class="channel-icon">🔊</span>
-                <span>Général</span>
-            </div>
-            <div class="channel-item">
-                <span class="channel-icon">🔊</span>
-                <span>Étude en groupe</span>
-            </div>
-            <div class="channel-item">
-                <span class="channel-icon">🔊</span>
-                <span>Révisions</span>
-            </div>
         </div>
     </div>
 
@@ -571,224 +582,209 @@
         </div>
         
         <div class="chat-messages">
+            <!-- Date separator -->
+            <div class="date-divider">
+                <span>Aujourd'hui</span>
+            </div>
+
             <!-- Message 1: Qu'est-ce que Discord -->
             <div class="message">
-                <div class="message-avatar">🤖</div>
+                <div class="message-avatar">📱</div>
                 <div class="message-content">
                     <div class="message-header">
-                        <span class="message-author">Discord Bot</span>
-                        <span class="message-timestamp">Aujourd'hui à 14:30</span>
+                        <span class="message-author">Professeur</span>
+                        <span class="message-timestamp">14:30</span>
                     </div>
                     <div class="message-text">
-                        <strong>📱 1. Qu'est-ce que Discord ?</strong>
+                        <strong>1. Qu'est-ce que Discord ?</strong>
                     </div>
                     <div class="embed">
                         <div class="embed-title">Bienvenue sur Discord !</div>
                         <div class="embed-description">
-                            Discord est une plateforme de communication créée en 2015. Elle permet de discuter de différentes façons :
+                            Discord est une plateforme de communication créée en 2015.<br><br>
+                            Elle permet de discuter :
                         </div>
-                        <div class="message-list">
-                            <li>💬 <strong>Messages écrits</strong> - Conversations textuelles instantanées</li>
-                            <li>🎤 <strong>Appels vocaux</strong> - Discussions audio en temps réel</li>
-                            <li>📹 <strong>Appels vidéo</strong> - Visioconférences avec partage d'écran</li>
-                        </div>
+                        <ul class="message-list">
+                            <li>par messages écrits</li>
+                            <li>par appels vocaux</li>
+                            <li>par appels vidéo</li>
+                        </ul>
                         <div class="embed-description" style="margin-top: 12px;">
-                            On peut l'utiliser sur <strong>ordinateur, téléphone ou tablette</strong>, et l'inscription est <strong>gratuite</strong> ! 🎉
+                            On peut l'utiliser sur <strong>ordinateur, téléphone ou tablette</strong>, et l'inscription est <strong>gratuite</strong>.
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Message 2: Wumpus animation -->
-            <div class="message">
-                <div class="message-avatar">
-                    <svg width="30" height="30" viewBox="0 0 292 80" fill="white">
-                        <path d="M61.7 20.8c-3.3-3.3-7.7-5.2-12.4-5.2s-9.1 1.9-12.4 5.2c-3.3 3.3-5.2 7.7-5.2 12.4 0 4.7 1.9 9.1 5.2 12.4 3.3 3.3 7.7 5.2 12.4 5.2s9.1-1.9 12.4-5.2c3.3-3.3 5.2-7.7 5.2-12.4 0-4.7-1.9-9.1-5.2-12.4z"/>
-                    </svg>
-                </div>
-                <div class="message-content">
-                    <div class="message-header">
-                        <span class="message-author">Wumpus</span>
-                        <span class="message-timestamp">Aujourd'hui à 14:32</span>
-                    </div>
-                    <div class="wumpus-container">
-                        <svg class="wumpus-svg" viewBox="0 0 200 200" fill="none">
-                            <ellipse cx="100" cy="150" rx="60" ry="20" fill="#5865f2" opacity="0.2"/>
-                            <path d="M100 140C122.091 140 140 122.091 140 100C140 77.9086 122.091 60 100 60C77.9086 60 60 77.9086 60 100C60 122.091 77.9086 140 100 140Z" fill="#5865f2"/>
-                            <circle cx="85" cy="95" r="8" fill="white"/>
-                            <circle cx="115" cy="95" r="8" fill="white"/>
-                            <circle cx="87" cy="93" r="4" fill="#2c2f33"/>
-                            <circle cx="117" cy="93" r="4" fill="#2c2f33"/>
-                            <path d="M85 110Q100 120 115 110" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
-                            <path d="M70 80Q65 75 70 70" stroke="#5865f2" stroke-width="8" stroke-linecap="round"/>
-                            <path d="M130 80Q135 75 130 70" stroke="#5865f2" stroke-width="8" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <div class="message-text" style="text-align: center;">
-                        Salut ! Je suis Wumpus, la mascotte de Discord ! 👋
-                    </div>
-                </div>
-            </div>
-
-            <!-- Message 3: Comment fonctionne Discord -->
+            <!-- Message 2: Comment fonctionne Discord -->
             <div class="message">
                 <div class="message-avatar">⚙️</div>
                 <div class="message-content">
                     <div class="message-header">
-                        <span class="message-author">Guide Discord</span>
-                        <span class="message-timestamp">Aujourd'hui à 14:35</span>
+                        <span class="message-author">Professeur</span>
+                        <span class="message-timestamp">14:32</span>
                     </div>
                     <div class="message-text">
-                        <strong>⚙️ 2. Comment fonctionne Discord ?</strong>
+                        <strong>2. Comment fonctionne Discord ?</strong>
                     </div>
                     <div class="embed">
                         <div class="embed-title">Les Serveurs Discord</div>
                         <div class="embed-description">
-                            Sur Discord, on utilise des <strong>serveurs</strong>. Un serveur est un espace privé ou public où plusieurs personnes peuvent discuter ensemble.
+                            Sur Discord, on utilise des <strong>serveurs</strong>.<br>
+                            Un serveur est un espace privé ou public où plusieurs personnes peuvent discuter.<br><br>
+                            Dans un serveur, il y a :
                         </div>
-                        <div class="feature-grid">
-                            <div class="feature-item">
-                                <div class="feature-item-icon">💬</div>
-                                <div class="feature-item-title">Salons Textuels</div>
-                                <div class="feature-item-desc">Pour écrire des messages et avoir des conversations</div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-item-icon">🎤</div>
-                                <div class="feature-item-title">Salons Vocaux</div>
-                                <div class="feature-item-desc">Pour parler en direct avec vos amis</div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-item-icon">👤</div>
-                                <div class="feature-item-title">Profil Personnel</div>
-                                <div class="feature-item-desc">Avec un pseudo unique et une photo de profil</div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-item-icon">📎</div>
-                                <div class="feature-item-title">Partage de Fichiers</div>
-                                <div class="feature-item-desc">Images, vidéos, documents et plus encore</div>
-                            </div>
-                        </div>
+                        <ul class="message-list">
+                            <li>des salons textuels pour écrire</li>
+                            <li>des salons vocaux pour parler en direct</li>
+                        </ul>
                         <div class="embed-description" style="margin-top: 12px;">
-                            <strong>💡 Astuce :</strong> Chaque serveur peut avoir plusieurs salons pour organiser les discussions par thème !
+                            Chaque utilisateur a un profil, avec un pseudo et une photo.<br>
+                            On peut aussi envoyer des images, vidéos et fichiers.
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Message 4: À quoi sert Discord -->
+            <!-- Message 3: À quoi sert Discord -->
             <div class="message">
                 <div class="message-avatar">🎯</div>
                 <div class="message-content">
                     <div class="message-header">
-                        <span class="message-author">Utilisation Discord</span>
-                        <span class="message-timestamp">Aujourd'hui à 14:38</span>
+                        <span class="message-author">Professeur</span>
+                        <span class="message-timestamp">14:34</span>
                     </div>
                     <div class="message-text">
-                        <strong>🎯 3. À quoi sert Discord ?</strong>
+                        <strong>3. À quoi sert Discord ?</strong>
                     </div>
                     <div class="embed">
                         <div class="embed-title">Les Utilisations de Discord</div>
                         <div class="embed-description">
-                            Discord est très polyvalent et peut être utilisé pour de nombreuses activités :
+                            Discord sert à :
                         </div>
-                        <div class="message-list">
-                            <li>👥 <strong>Discuter entre amis</strong> - Rester en contact avec vos proches</li>
-                            <li>📚 <strong>Travailler en groupe pour les devoirs</strong> - Collaboration scolaire</li>
-                            <li>📋 <strong>Organiser des projets</strong> - Coordination d'équipe</li>
-                            <li>🌍 <strong>Rejoindre des communautés</strong> - Jeux, musique, sport, études...</li>
-                            <li>🎓 <strong>Sessions d'étude</strong> - Réviser ensemble avec des camarades</li>
-                            <li>❓ <strong>Aide aux devoirs</strong> - S'entraider pour comprendre les cours</li>
-                        </div>
-                        <div class="embed-description" style="margin-top: 12px; padding: 12px; background: #5865f21a; border-radius: 4px;">
-                            <strong>📖 Info importante :</strong> Beaucoup d'élèves utilisent Discord pour réviser ensemble ou s'aider pour les devoirs. C'est un excellent outil de collaboration !
+                        <ul class="message-list">
+                            <li>discuter entre amis</li>
+                            <li>travailler en groupe pour les devoirs</li>
+                            <li>organiser des projets</li>
+                            <li>rejoindre des communautés (jeux, musique, sport, études…)</li>
+                        </ul>
+                        <div class="embed-description" style="margin-top: 12px;">
+                            Beaucoup d'élèves l'utilisent pour réviser ensemble ou s'aider pour les devoirs.
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Message 5: Exemples de communautés -->
-            <div class="message">
-                <div class="message-avatar">🌐</div>
-                <div class="message-content">
-                    <div class="message-header">
-                        <span class="message-author">Communautés Discord</span>
-                        <span class="message-timestamp">Aujourd'hui à 14:40</span>
-                    </div>
-                    <div class="message-text">
-                        <strong>Exemples de serveurs populaires :</strong>
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <div class="feature-item-icon">🎮</div>
-                            <div class="feature-item-title">Gaming</div>
-                            <div class="feature-item-desc">Serveurs de jeux vidéo, équipes e-sport, streamers</div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-item-icon">🎨</div>
-                            <div class="feature-item-title">Art & Créativité</div>
-                            <div class="feature-item-desc">Dessin, musique, design, écriture créative</div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-item-icon">📚</div>
-                            <div class="feature-item-title">Éducation</div>
-                            <div class="feature-item-desc">Aide aux devoirs, tutorat, groupes d'étude</div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-item-icon">🤝</div>
-                            <div class="feature-item-title">Communautés</div>
-                            <div class="feature-item-desc">Groupes d'intérêts communs, clubs, associations</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Message 6: Avantages et inconvénients -->
+            <!-- Message 4: Avantages et inconvénients -->
             <div class="message">
                 <div class="message-avatar">⚖️</div>
                 <div class="message-content">
                     <div class="message-header">
-                        <span class="message-author">Analyse Discord</span>
-                        <span class="message-timestamp">Aujourd'hui à 14:42</span>
+                        <span class="message-author">Professeur</span>
+                        <span class="message-timestamp">14:36</span>
                     </div>
                     <div class="message-text">
-                        <strong>⚖️ 4. Avantages et inconvénients</strong>
+                        <strong>4. Avantages et inconvénients</strong>
                     </div>
                     <div class="pros-cons-grid">
                         <div class="pros-cons-card">
                             <div class="pros-cons-title pros">
                                 ✅ Avantages
                             </div>
-                            <div class="message-list">
-                                <li><strong>Facile à utiliser</strong> - Interface intuitive et accessible</li>
-                                <li><strong>Gratuit</strong> - Toutes les fonctions de base sont gratuites</li>
-                                <li><strong>Communication rapide</strong> - Messages instantanés et fluides</li>
-                                <li><strong>Travail en groupe</strong> - Parfait pour collaborer</li>
-                                <li><strong>Multi-plateforme</strong> - PC, mobile, tablette, navigateur</li>
-                                <li><strong>Partage de fichiers</strong> - Facile et rapide</li>
-                                <li><strong>Personnalisable</strong> - Rôles, permissions, bots</li>
+                            <div class="inline-list">
+                                <div class="list-item">facile à utiliser</div>
+                                <div class="list-item">gratuit</div>
+                                <div class="list-item">communication rapide</div>
+                                <div class="list-item">pratique pour le travail en groupe</div>
                             </div>
                         </div>
                         <div class="pros-cons-card">
                             <div class="pros-cons-title cons">
                                 ⚠️ Inconvénients
                             </div>
-                            <div class="message-list">
-                                <li><strong>Perte de temps</strong> - Peut devenir addictif</li>
-                                <li><strong>Distraction</strong> - Notifications constantes</li>
-                                <li><strong>Sécurité</strong> - Risques si mal configuré</li>
-                                <li><strong>Harcèlement en ligne</strong> - Possible dans certains serveurs</li>
-                                <li><strong>Surcharge d'infos</strong> - Trop de serveurs peut être stressant</li>
-                                <li><strong>Vie privée</strong> - Attention aux informations partagées</li>
+                            <div class="inline-list">
+                                <div class="list-item">peut faire perdre du temps</div>
+                                <div class="list-item">risque de distraction</div>
+                                <div class="list-item">attention à la sécurité et au harcèlement en ligne</div>
                             </div>
                         </div>
                     </div>
                     <div class="warning-box">
                         <div class="warning-icon">⚠️</div>
                         <div class="warning-text">
-                            <strong>Important : Sécurité et confidentialité</strong><br>
-                            Il est donc important de bien régler la confidentialité et de rester prudent. Voici quelques conseils :
-                            <div class="message-list" style="margin-top: 8px;">
-                                <li>Ne partagez jamais vos informations personnelles</li>
-                                <li>Configurez vos paramètres de confidentialité</li>
-                                <li>Bloquez et signalez les utilisateurs inappropriés</li>
-                                <li
+                            <strong>Important :</strong> Il est donc important de bien régler la confidentialité et de rester prudent.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre de saisie -->
+        <div class="chat-input">
+            <div class="input-wrapper">
+                <input type="text" class="input-field" placeholder="Écrire un message dans #introduction">
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar droite -->
+    <div class="members-sidebar">
+        <div class="members-group">
+            <div class="members-group-title">MEMBRES — 2</div>
+            <div class="member-item">
+                <div class="member-avatar">P</div>
+                <div class="member-status"></div>
+                <div class="member-name">Professeur</div>
+            </div>
+            <div class="member-item">
+                <div class="member-avatar">E</div>
+                <div class="member-status"></div>
+                <div class="member-name">Élève</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Highlight active channels
+        document.querySelectorAll('.channel-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update chat header title
+                const channelName = this.querySelector('span:last-child').textContent;
+                document.querySelector('.chat-header-title span:last-child').textContent = channelName;
+                
+                // Update input placeholder
+                document.querySelector('.input-field').placeholder = `Écrire un message dans #${channelName}`;
+            });
+        });
+
+        // Highlight active servers
+        document.querySelectorAll('.server-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                document.querySelectorAll('.server-icon').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Auto-scroll to bottom of messages
+        const chatMessages = document.querySelector('.chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Input field interaction
+        const inputField = document.querySelector('.input-field');
+        inputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                e.preventDefault();
+                this.value = '';
+            }
+        });
+
+        // Focus input field when clicking chat area
+        document.querySelector('.chat-messages').addEventListener('click', () => {
+            inputField.focus();
+        });
+    </script>
+</body>
+</html>
